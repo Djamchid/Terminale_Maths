@@ -1,0 +1,398 @@
+<!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Terminale Spé Math - Module 1.A : Dérivation, continuité et limites</title>
+  <style>
+    :root{
+      --bg:#0f1220; --panel:#141828; --text:#e9eef7;
+      --muted:#9aa4b2; --ok:#1db954; --warn:#ffb020; --err:#ff4d4f; --accent:#2dd4bf;
+      --border:#233045;
+    }
+    html,body{background:var(--bg); color:var(--text); font:16px/1.5 system-ui,Segoe UI,Roboto,Helvetica,Arial,sans-serif; margin:0;}
+    .wrap{max-width:960px; margin:0 auto; padding:24px;}
+    h1{font-size:1.6rem; margin:0 0 8px;}
+    h2{font-size:1.4rem; margin:1.5rem 0 0.8rem;}
+    h3{font-size:1.2rem; margin:1.2rem 0 0.6rem;}
+    .muted{color:var(--muted)}
+    .row{display:flex; gap:.5rem; align-items:center; flex-wrap:wrap}
+    .btn{background:var(--accent); border:none; color:#0b0f1a; padding:.5rem .8rem; border-radius:.6rem; cursor:pointer; font-weight:600}
+    .btn.secondary{background:#1f2537; color:var(--text); border:1px solid var(--border)}
+    .panel{background:var(--panel); border:1px solid var(--border); border-radius:1rem; padding:16px; box-shadow:0 8px 20px rgba(0,0,0,.25); margin:16px 0}
+    .q{border:1px dashed var(--border); border-radius:.8rem; padding:12px; margin:12px 0}
+    label{display:block; margin-bottom:.4rem; font-weight:600}
+    input[type="text"],input[type="number"]{width:100%; max-width:420px; padding:.45rem .6rem; border-radius:.5rem; border:1px solid var(--border); background:#0d1220; color:var(--text)}
+    details{margin:.25rem 0}
+    summary{cursor:pointer}
+    .tag{display:inline-flex; align-items:center; gap:.4rem; border-radius:999px; padding:.2rem .6rem; border:1px solid var(--border); background:#10162a; font-size:.9rem}
+    .tag.ok{border-color:rgba(29,185,84,.35); background:rgba(29,185,84,.1); color:#a7f3d0}
+    .tag.err{border-color:rgba(255,77,79,.35); background:rgba(255,77,79,.08); color:#fecaca}
+    .progress{height:12px; background:#0b0f1a; border:1px solid var(--border); border-radius:999px; overflow:hidden}
+    .bar{height:100%; width:0%; background:linear-gradient(90deg,var(--accent),#60a5fa); transition:width .25s ease}
+    .grid{display:grid; gap:16px}
+    @media(min-width:860px){ .grid.cols-2{grid-template-columns:1fr 1fr} }
+    math[display="block"]{display:block; margin:.6rem 0}
+    math{font-family: STIX Math, Cambria Math, "Times New Roman", serif;}
+    .module-info{background:rgba(45,212,191,0.1); border:1px solid var(--accent); border-radius:.8rem; padding:12px; margin:12px 0; font-size:.9rem}
+    .module-info strong{color:var(--accent)}
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <header class="panel">
+      <h1>Terminale Spé Math — <span class="muted">Module 1.A : Dérivation, continuité et limites</span></h1>
+      <div class="module-info">
+        <strong>Durée estimée :</strong> 60 minutes (Théorie : 12 min, Exercices : 48 min)<br>
+        <strong>Objectifs :</strong> Maîtriser les compléments sur la dérivation, comprendre la continuité et calculer des limites de fonctions.
+      </div>
+      <p class="muted">Module autonome conforme au programme de Terminale spécialité mathématiques.</p>
+      <div class="row" aria-live="polite" style="margin:.5rem 0">
+        <strong>Progression&nbsp;:</strong>
+        <div class="progress" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0" style="flex:1; min-width:240px">
+          <div class="bar" id="progressBar"></div>
+        </div>
+        <span id="progressText" class="muted" style="min-width:100px; text-align:right">0 / 0</span>
+      </div>
+      <div class="row">
+        <button class="btn" id="checkAll">Tout valider</button>
+        <button class="btn secondary" id="reset">Réinitialiser</button>
+      </div>
+    </header>
+
+    <section class="panel">
+      <h2>Théorie (12 minutes)</h2>
+      
+      <h3>Compléments sur la dérivation</h3>
+      <p>La dérivée d'une fonction <math xmlns="http://www.w3.org/1998/Math/MathML"><mi>f</mi></math> en un point <math xmlns="http://www.w3.org/1998/Math/MathML"><mi>a</mi></math> représente le coefficient directeur de la tangente à la courbe au point d'abscisse <math xmlns="http://www.w3.org/1998/Math/MathML"><mi>a</mi></math>.</p>
+      
+      <math xmlns="http://www.w3.org/1998/Math/MathML" display="block">
+        <mrow>
+          <msup><mi>f</mi><mo>′</mo></msup><mo>(</mo><mi>a</mi><mo>)</mo>
+          <mo>=</mo>
+          <munder>
+            <mi>lim</mi>
+            <mrow><mi>h</mi><mo>→</mo><mn>0</mn></mrow>
+          </munder>
+          <mfrac>
+            <mrow><mi>f</mi><mo>(</mo><mi>a</mi><mo>+</mo><mi>h</mi><mo>)</mo><mo>−</mo><mi>f</mi><mo>(</mo><mi>a</mi><mo>)</mo></mrow>
+            <mi>h</mi>
+          </mfrac>
+        </mrow>
+      </math>
+      
+      <h3>Continuité des fonctions</h3>
+      <p>Une fonction <math xmlns="http://www.w3.org/1998/Math/MathML"><mi>f</mi></math> est continue en <math xmlns="http://www.w3.org/1998/Math/MathML"><mi>a</mi></math> si :</p>
+      
+      <math xmlns="http://www.w3.org/1998/Math/MathML" display="block">
+        <mrow>
+          <munder>
+            <mi>lim</mi>
+            <mrow><mi>x</mi><mo>→</mo><mi>a</mi></mrow>
+          </munder>
+          <mi>f</mi><mo>(</mo><mi>x</mi><mo>)</mo>
+          <mo>=</mo>
+          <mi>f</mi><mo>(</mo><mi>a</mi><mo>)</mo>
+        </mrow>
+      </math>
+      
+      <h3>Limites de fonctions</h3>
+      <p>La limite d'une fonction étudie son comportement aux bornes de son domaine de définition ou aux points de discontinuité.</p>
+      
+      <math xmlns="http://www.w3.org/1998/Math/MathML" display="block">
+        <mrow>
+          <munder>
+            <mi>lim</mi>
+            <mrow><mi>x</mi><mo>→</mo><mo>+</mo><mi>∞</mi></mrow>
+          </munder>
+          <mfrac>
+            <mn>1</mn>
+            <mi>x</mi>
+          </mfrac>
+          <mo>=</mo>
+          <mn>0</mn>
+        </mrow>
+      </math>
+    </section>
+
+    <section class="panel">
+      <h2>Exercices (48 minutes)</h2>
+
+      <!-- Ex1 : number -->
+      <div class="q" data-id="q1" data-type="number" data-answer="6">
+        <label for="q1">
+          Soit <math xmlns="http://www.w3.org/1998/Math/MathML"><mrow><mi>f</mi><mo>(</mo><mi>x</mi><mo>)</mo><mo>=</mo><msup><mi>x</mi><mn>2</mn></msup><mo>+</mo><mn>2</mn><mi>x</mi></mrow></math>.
+          Calculer <math xmlns="http://www.w3.org/1998/Math/MathML"><mrow><msup><mi>f</mi><mo>′</mo></msup><mo>(</mo><mn>2</mn><mo>)</mo></mrow></math>.
+        </label>
+        <input id="q1" type="number" inputmode="numeric" placeholder="Entier" />
+        <details><summary>Indice</summary><p>Dériver la fonction puis évaluer en x=2.</p></details>
+        <details><summary>Solution</summary><p>La dérivée est <math xmlns="http://www.w3.org/1998/Math/MathML"><mrow><msup><mi>f</mi><mo>′</mo></msup><mo>(</mo><mi>x</mi><mo>)</mo><mo>=</mo><mn>2</mn><mi>x</mi><mo>+</mo><mn>2</mn></mrow></math>, donc <math xmlns="http://www.w3.org/1998/Math/MathML"><mrow><msup><mi>f</mi><mo>′</mo></msup><mo>(</mo><mn>2</mn><mo>)</mo><mo>=</mo><mn>6</mn></mrow></math>.</p></details>
+        <div class="row"><button class="btn check">Valider</button><span class="tag" data-result=""></span></div>
+      </div>
+
+      <!-- Ex2 : single (radio) -->
+      <div class="q" data-id="q2" data-type="single" data-answer="b">
+        <label>La fonction <math xmlns="http://www.w3.org/1998/Math/MathML"><mrow><mi>f</mi><mo>(</mo><mi>x</mi><mo>)</mo><mo>=</mo><mfrac><mn>1</mn><mi>x</mi></mfrac></mrow></math> est :</label>
+        <div class="row" role="group" aria-label="Choix unique">
+          <label><input type="radio" name="q2" value="a" /> Continue sur ℝ</label>
+          <label><input type="radio" name="q2" value="b" /> Continue sur ℝ\{0}</label>
+          <label><input type="radio" name="q2" value="c" /> Continue en 0</label>
+        </div>
+        <details><summary>Indice</summary><p>Étudier le domaine de définition et les limites aux bornes.</p></details>
+        <details><summary>Solution</summary><p>La fonction n'est pas définie en 0, donc elle est continue sur ℝ\{0}.</p></details>
+        <div class="row"><button class="btn check">Valider</button><span class="tag" data-result=""></span></div>
+      </div>
+
+      <!-- Ex3 : mc (cases) -->
+      <div class="q" data-id="q3" data-type="mc" data-answer="a,c">
+        <label>Cocher toutes les affirmations correctes concernant les limites :</label>
+        <div class="row" role="group" aria-label="Choix multiples">
+          <label><input type="checkbox" value="a" /> <math xmlns="http://www.w3.org/1998/Math/MathML"><mrow><munder><mi>lim</mi><mrow><mi>x</mi><mo>→</mo><mo>+</mo><mi>∞</mi></mrow></munder><mfrac><mn>1</mn><mi>x</mi></mfrac><mo>=</mo><mn>0</mn></mrow></math></label>
+          <label><input type="checkbox" value="b" /> <math xmlns="http://www.w3.org/1998/Math/MathML"><mrow><munder><mi>lim</mi><mrow><mi>x</mi><mo>→</mo><mn>0</mn></mrow></munder><mfrac><mn>1</mn><mi>x</mi></mfrac><mo>=</mo><mn>0</mn></mrow></math></label>
+          <label><input type="checkbox" value="c" /> <math xmlns="http://www.w3.org/1998/Math/MathML"><mrow><munder><mi>lim</mi><mrow><mi>x</mi><mo>→</mo><mn>0</mn></mrow></munder><mfrac><mrow><mi>sin</mi><mi>x</mi></mrow><mi>x</mi></mfrac><mo>=</mo><mn>1</mn></mrow></math></label>
+        </div>
+        <details><summary>Indice</summary><p>Rappelez-vous des limites classiques et des formes indéterminées.</p></details>
+        <details><summary>Solution</summary><p>Vrai : (a) et (c). Faux : (b) car la limite en 0 de 1/x n'existe pas (elle tend vers ±∞).</p></details>
+        <div class="row"><button class="btn check">Valider</button><span class="tag" data-result=""></span></div>
+      </div>
+
+      <!-- Ex4 : short -->
+      <div class="q" data-id="q4" data-type="short" data-answers='["4"]'>
+        <label for="q4">
+          Calculer la limite suivante : 
+          <math xmlns="http://www.w3.org/1998/Math/MathML">
+            <mrow>
+              <munder>
+                <mi>lim</mi>
+                <mrow><mi>x</mi><mo>→</mo><mn>2</mn></mrow>
+              </munder>
+              <mfrac>
+                <mrow><msup><mi>x</mi><mn>2</mn></msup><mo>−</mo><mn>4</mn></mrow>
+                <mrow><mi>x</mi><mo>−</mo><mn>2</mn></mrow>
+              </mfrac>
+            </mrow>
+          </math>
+        </label>
+        <input id="q4" type="text" placeholder="Votre réponse" />
+        <details><summary>Indice</summary><p>Factoriser le numérateur et simplifier.</p></details>
+        <details><summary>Solution</summary><p>On factorise : <math xmlns="http://www.w3.org/1998/Math/MathML"><mrow><msup><mi>x</mi><mn>2</mn></msup><mo>−</mo><mn>4</mn><mo>=</mo><mo>(</mo><mi>x</mi><mo>−</mo><mn>2</mn><mo>)</mo><mo>(</mo><mi>x</mi><mo>+</mo><mn>2</mn><mo>)</mo></mrow></math>. Après simplification, la limite vaut 4.</p></details>
+        <div class="row"><button class="btn check">Valider</button><span class="tag" data-result=""></span></div>
+      </div>
+
+      <!-- Ex5 : single (radio) -->
+      <div class="q" data-id="q5" data-type="single" data-answer="c">
+        <label>Le théorème des valeurs intermédiaires s'applique :</label>
+        <div class="row" role="group" aria-label="Choix unique">
+          <label><input type="radio" name="q5" value="a" /> À toute fonction</label>
+          <label><input type="radio" name="q5" value="b" /> Uniquement aux fonctions dérivables</label>
+          <label><input type="radio" name="q5" value="c" /> Aux fonctions continues sur un intervalle</label>
+        </div>
+        <details><summary>Indice</summary><p>Rappelez-vous des hypothèses du théorème.</p></details>
+        <details><summary>Solution</summary><p>Le théorème des valeurs intermédiaires s'applique aux fonctions continues sur un intervalle fermé.</p></details>
+        <div class="row"><button class="btn check">Valider</button><span class="tag" data-result=""></span></div>
+      </div>
+
+    </section>
+
+    <footer class="panel muted">
+      <small>Module 1.A : Compléments sur la dérivation, continuité et limites — Terminale Spécialité Mathématiques</small>
+    </footer>
+  </div>
+
+  <script>
+    // ======== Configuration minimale ========
+    const STORAGE_KEY = "interactive_course_progress_v1";
+
+    // ======== Utilitaires ========
+    const $ = (sel, root=document) => root.querySelector(sel);
+    const $$ = (sel, root=document) => Array.from(root.querySelectorAll(sel));
+    const byId = id => document.getElementById(id);
+
+    function normalizeText(s){
+      return (s ?? "")
+        .toString()
+        .trim()
+        .toLowerCase()
+        .replace(/\s+/g," ")
+        .replace(/[’'`]/g,"'")
+        .replace(/[\u200B-\u200D\uFEFF]/g,""); // zero-width
+    }
+
+    function eqSet(a, b){
+      if(a.size !== b.size) return false;
+      for(const v of a) if(!b.has(v)) return false;
+      return true;
+    }
+
+    // ======== Persistance ========
+    function loadState(){
+      try { return JSON.parse(localStorage.getItem(STORAGE_KEY) || "{}"); }
+      catch { return {}; }
+    }
+    function saveState(state){
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+    }
+
+    // ======== Validation par type ========
+    function validateQuestion(q){
+      const type = q.dataset.type;
+      const id = q.dataset.id;
+      let ok = false, userVal = null;
+
+      if(type === "number"){
+        const input = $("input[type='number']", q);
+        const expected = Number(q.dataset.answer);
+        userVal = Number(input.value);
+        ok = Number.isFinite(userVal) && (userVal === expected);
+      }
+      else if(type === "short"){
+        const input = $("input[type='text']", q);
+        userVal = normalizeText(input.value);
+        let answers = [];
+        try { answers = JSON.parse(q.dataset.answers || "[]").map(normalizeText); }
+        catch {}
+        ok = answers.includes(userVal);
+      }
+      else if(type === "single"){
+        const name = $$("input[type='radio']", q)[0]?.name;
+        const checked = $(`input[type='radio'][name="${name}"]:checked`);
+        userVal = checked?.value || null;
+        ok = (userVal === q.dataset.answer);
+      }
+      else if(type === "mc"){
+        const expected = new Set((q.dataset.answer || "").split(",").map(v => v.trim()).filter(Boolean));
+        const chosen = new Set($$("input[type='checkbox']:checked", q).map(el => el.value));
+        userVal = Array.from(chosen);
+        ok = eqSet(chosen, expected);
+      }
+
+      const tag = $("[data-result]", q);
+      if(tag){
+        tag.classList.remove("ok","err");
+        if(ok){ tag.classList.add("ok"); tag.textContent = "✅ Correct"; }
+        else{ tag.classList.add("err"); tag.textContent = "❌ À revoir"; }
+      }
+      return { ok, userVal };
+    }
+
+    function applyStateToQuestion(q, state){
+      const id = q.dataset.id;
+      const rec = state[id];
+      if(!rec) return;
+
+      if(q.dataset.type === "number"){
+        const input = $("input[type='number']", q);
+        if(rec.input != null) input.value = rec.input;
+      }
+      else if(q.dataset.type === "short"){
+        const input = $("input[type='text']", q);
+        if(rec.input != null) input.value = rec.input;
+      }
+      else if(q.dataset.type === "single"){
+        $$("input[type='radio']", q).forEach(r => { r.checked = (r.value === rec.checked); });
+      }
+      else if(q.dataset.type === "mc"){
+        const set = new Set(rec.checked || []);
+        $$("input[type='checkbox']", q).forEach(c => { c.checked = set.has(c.value); });
+      }
+      // Afficher l'état précédent si on veut :
+      if(rec.correct === true){
+        const tag = $("[data-result]", q);
+        if(tag){ tag.classList.add("ok"); tag.textContent = "✅ Correct"; }
+      }
+    }
+
+    function updateProgress(){
+      const questions = $$(".q");
+      const total = questions.length;
+      const ok = questions.filter(q => $("[data-result]", q)?.classList.contains("ok")).length;
+      const pct = total ? Math.round(100 * ok / total) : 0;
+      byId("progressBar").style.width = pct + "%";
+      const pb = $(".progress");
+      pb?.setAttribute("aria-valuenow", String(pct));
+      byId("progressText").textContent = `${ok} / ${total}`;
+    }
+
+    // ======== Initialisation ========
+    document.addEventListener("DOMContentLoaded", () => {
+      const state = loadState();
+      const questions = $$(".q");
+      questions.forEach(q => applyStateToQuestion(q, state));
+      updateProgress();
+
+      // Boutons "Valider" par question
+      $$(".q .check").forEach(btn => {
+        btn.addEventListener("click", () => {
+          const q = btn.closest(".q");
+          const id = q.dataset.id;
+          const {ok, userVal} = validateQuestion(q);
+          // Sauvegarde
+          const st = loadState();
+          if(q.dataset.type === "number" || q.dataset.type === "short"){
+            const input = q.dataset.type === "number" ? $("input[type='number']", q) : $("input[type='text']", q);
+            st[id] = { input: input.value, correct: ok };
+          }else if(q.dataset.type === "single"){
+            const name = $$("input[type='radio']", q)[0]?.name;
+            const checked = $(`input[type='radio'][name="${name}"]:checked`, q)?.value ?? null;
+            st[id] = { checked, correct: ok };
+          }else if(q.dataset.type === "mc"){
+            st[id] = { checked: userVal, correct: ok };
+          }
+          saveState(st);
+          updateProgress();
+        });
+      });
+
+      // Tout valider
+      byId("checkAll").addEventListener("click", () => {
+        const st = loadState();
+        let firstWrong = null;
+        $$(".q").forEach(q => {
+          const id = q.dataset.id;
+          const {ok, userVal} = validateQuestion(q);
+          if(firstWrong == null && !ok) firstWrong = q;
+          if(q.dataset.type === "number" || q.dataset.type === "short"){
+            const input = q.dataset.type === "number" ? $("input[type='number']", q) : $("input[type='text']", q);
+            st[id] = { input: input.value, correct: ok };
+          }else if(q.dataset.type === "single"){
+            const name = $$("input[type='radio']", q)[0]?.name;
+            const checked = $(`input[type='radio'][name="${name}"]:checked`, q)?.value ?? null;
+            st[id] = { checked, correct: ok };
+          }else if(q.dataset.type === "mc"){
+            st[id] = { checked: userVal, correct: ok };
+          }
+        });
+        saveState(st);
+        updateProgress();
+        if(firstWrong) firstWrong.scrollIntoView({behavior:"smooth", block:"center"});
+      });
+
+      // Réinitialiser
+      byId("reset").addEventListener("click", () => {
+        localStorage.removeItem(STORAGE_KEY);
+        $$(".q").forEach(q => {
+          const tag = $("[data-result]", q);
+          tag?.classList.remove("ok","err");
+          tag && (tag.textContent = "");
+          $$("input[type='text'],input[type='number']", q).forEach(i => i.value = "");
+          $$("input[type='radio']", q).forEach(r => r.checked = false);
+          $$("input[type='checkbox']", q).forEach(c => c.checked = false);
+        });
+        updateProgress();
+      });
+
+      // Raccourcis clavier utiles
+      document.addEventListener("keydown", (e) => {
+        const activeQ = document.activeElement?.closest?.(".q");
+        if(!activeQ) return;
+        if(e.key === "Enter"){ e.preventDefault(); activeQ.querySelector(".check")?.click(); }
+        if(e.key.toLowerCase() === "h"){ activeQ.querySelector("details")?.setAttribute("open",""); }
+        if(e.key.toLowerCase() === "s"){
+          const sols = Array.from(activeQ.querySelectorAll("details"));
+          sols[1]?.setAttribute("open","");
+        }
+      });
+    });
+  </script>
+</body>
+</html>

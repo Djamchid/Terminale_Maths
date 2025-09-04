@@ -1,0 +1,390 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sélecteur de Modules - Terminale Spé Math</title>
+    <style>
+        :root {
+            --primary: #2563eb;
+            --primary-dark: #1e40af;
+            --secondary: #4b5563;
+            --light: #f3f4f6;
+            --lighter: #f9fafb;
+            --dark: #1f2937;
+            --success: #10b981;
+            --warning: #f59e0b;
+            --danger: #ef4444;
+            --border: #e5e7eb;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+        }
+        
+        body {
+            background: linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 100%);
+            color: var(--dark);
+            min-height: 100vh;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        header {
+            text-align: center;
+            margin-bottom: 40px;
+            padding: 20px;
+        }
+        
+        h1 {
+            font-size: 2.5rem;
+            color: var(--primary-dark);
+            margin-bottom: 10px;
+        }
+        
+        .subtitle {
+            font-size: 1.2rem;
+            color: var(--secondary);
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        
+        .filters {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin-bottom: 30px;
+            flex-wrap: wrap;
+        }
+        
+        .filter-btn {
+            padding: 10px 20px;
+            background: white;
+            border: 2px solid var(--border);
+            border-radius: 50px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+        
+        .filter-btn:hover, .filter-btn.active {
+            background: var(--primary);
+            color: white;
+            border-color: var(--primary);
+        }
+        
+        .modules-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 25px;
+        }
+        
+        .module-card {
+            background: white;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05), 0 1px 3px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        
+        .module-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 15px rgba(0, 0, 0, 0.1), 0 4px 6px rgba(0, 0, 0, 0.05);
+        }
+        
+        .module-header {
+            padding: 20px;
+            background: var(--primary);
+            color: white;
+        }
+        
+        .module-id {
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin-bottom: 5px;
+        }
+        
+        .module-title {
+            font-size: 1.1rem;
+            opacity: 0.9;
+        }
+        
+        .module-content {
+            padding: 20px;
+        }
+        
+        .module-desc {
+            color: var(--secondary);
+            margin-bottom: 20px;
+            line-height: 1.5;
+        }
+        
+        .module-meta {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 20px;
+            font-size: 0.9rem;
+        }
+        
+        .module-duration {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            color: var(--secondary);
+        }
+        
+        .module-status {
+            padding: 4px 10px;
+            border-radius: 50px;
+            font-size: 0.8rem;
+            font-weight: 600;
+        }
+        
+        .status-ready {
+            background: #d1fae5;
+            color: #065f46;
+        }
+        
+        .status-pending {
+            background: #fef3c7;
+            color: #92400e;
+        }
+        
+        .module-action {
+            display: block;
+            width: 100%;
+            padding: 12px;
+            text-align: center;
+            background: var(--primary);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background 0.3s ease;
+        }
+        
+        .module-action:hover {
+            background: var(--primary-dark);
+        }
+        
+        .module-action.pending {
+            background: var(--secondary);
+            cursor: not-allowed;
+        }
+        
+        .module-action.pending:hover {
+            background: var(--secondary);
+        }
+        
+        footer {
+            text-align: center;
+            margin-top: 60px;
+            padding: 20px;
+            color: var(--secondary);
+            font-size: 0.9rem;
+        }
+        
+        @media (max-width: 768px) {
+            .modules-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            h1 {
+                font-size: 2rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Sélecteur de Modules - Terminale Spé Math</h1>
+            <p class="subtitle">Sélectionnez un module pour accéder au cours interactif. Chaque module est conçu pour une séance d'une heure.</p>
+        </header>
+        
+        <div class="filters">
+            <button class="filter-btn active" data-filter="all">Tous les modules</button>
+            <button class="filter-btn" data-filter="analysis">Analyse</button>
+            <button class="filter-btn" data-filter="sequences">Suites</button>
+            <button class="filter-btn" data-filter="review">Révisions</button>
+        </div>
+        
+        <div class="modules-grid">
+            <!-- Module 1.A (prêt) -->
+            <div class="module-card" data-category="analysis">
+                <div class="module-header">
+                    <div class="module-id">Module 1.A</div>
+                    <div class="module-title">Compléments sur la dérivation</div>
+                </div>
+                <div class="module-content">
+                    <p class="module-desc">Taux d'accroissement, extremums, dérivation des fonctions usuelles.</p>
+                    <div class="module-meta">
+                        <div class="module-duration">⏱ 60 min</div>
+                        <div class="module-status status-ready">Disponible</div>
+                    </div>
+                    <a href="module_1A.html" class="module-action">Commencer ce module</a>
+                </div>
+            </div>
+            
+            <!-- Module 1.B (en attente) -->
+            <div class="module-card" data-category="analysis">
+                <div class="module-header">
+                    <div class="module-id">Module 1.B</div>
+                    <div class="module-title">Continuité des fonctions</div>
+                </div>
+                <div class="module-content">
+                    <p class="module-desc">Définition, théorème des valeurs intermédiaires, applications.</p>
+                    <div class="module-meta">
+                        <div class="module-duration">⏱ 60 min</div>
+                        <div class="module-status status-pending">En préparation</div>
+                    </div>
+                    <button class="module-action pending" onclick="showPendingMessage()">Module en préparation</button>
+                </div>
+            </div>
+            
+            <!-- Module 1.C (en attente) -->
+            <div class="module-card" data-category="analysis">
+                <div class="module-header">
+                    <div class="module-id">Module 1.C</div>
+                    <div class="module-title">Limites de fonctions</div>
+                </div>
+                <div class="module-content">
+                    <p class="module-desc">Limite finie ou infinie, notation, opérations sur les limites.</p>
+                    <div class="module-meta">
+                        <div class="module-duration">⏱ 60 min</div>
+                        <div class="module-status status-pending">En préparation</div>
+                    </div>
+                    <button class="module-action pending" onclick="showPendingMessage()">Module en préparation</button>
+                </div>
+            </div>
+            
+            <!-- Module 2.A (en attente) -->
+            <div class="module-card" data-category="sequences">
+                <div class="module-header">
+                    <div class="module-id">Module 2.A</div>
+                    <div class="module-title">Suites et raisonnement par récurrence</div>
+                </div>
+                <div class="module-content">
+                    <p class="module-desc">Définition des suites, principe de récurrence, applications.</p>
+                    <div class="module-meta">
+                        <div class="module-duration">⏱ 60 min</div>
+                        <div class="module-status status-pending">En préparation</div>
+                    </div>
+                    <button class="module-action pending" onclick="showPendingMessage()">Module en préparation</button>
+                </div>
+            </div>
+            
+            <!-- Module 2.B (en attente) -->
+            <div class="module-card" data-category="sequences">
+                <div class="module-header">
+                    <div class="module-id">Module 2.B</div>
+                    <div class="module-title">Convergence et divergence des suites</div>
+                </div>
+                <div class="module-content">
+                    <p class="module-desc">Suites convergentes, divergentes, théorèmes de convergence.</p>
+                    <div class="module-meta">
+                        <div class="module-duration">⏱ 60 min</div>
+                        <div class="module-status status-pending">En préparation</div>
+                    </div>
+                    <button class="module-action pending" onclick="showPendingMessage()">Module en préparation</button>
+                </div>
+            </div>
+            
+            <!-- Module 3.A (en attente) -->
+            <div class="module-card" data-category="review">
+                <div class="module-header">
+                    <div class="module-id">Module 3.A</div>
+                    <div class="module-title">Révisions de Première (Partie 1)</div>
+                </div>
+                <div class="module-content">
+                    <p class="module-desc">Rappels sur les fonctions, dérivation, probabilités.</p>
+                    <div class="module-meta">
+                        <div class="module-duration">⏱ 60 min</div>
+                        <div class="module-status status-pending">En préparation</div>
+                    </div>
+                    <button class="module-action pending" onclick="showPendingMessage()">Module en préparation</button>
+                </div>
+            </div>
+            
+            <!-- Module 3.B (en attente) -->
+            <div class="module-card" data-category="review">
+                <div class="module-header">
+                    <div class="module-id">Module 3.B</div>
+                    <div class="module-title">Révisions de Première (Partie 2)</div>
+                </div>
+                <div class="module-content">
+                    <p class="module-desc">Rappels sur les suites, algorithmique, géométrie.</p>
+                    <div class="module-meta">
+                        <div class="module-duration">⏱ 60 min</div>
+                        <div class="module-status status-pending">En préparation</div>
+                    </div>
+                    <button class="module-action pending" onclick="showPendingMessage()">Module en préparation</button>
+                </div>
+            </div>
+        </div>
+        
+        <footer>
+            <p>Programme de Terminale spécialité mathématiques - Septembre 2025</p>
+            <p>© 2025 - Ministère de l'Éducation nationale</p>
+        </footer>
+    </div>
+
+    <script>
+        // Filtrage des modules
+        document.querySelectorAll('.filter-btn').forEach(button => {
+            button.addEventListener('click', () => {
+                // Retirer la classe active de tous les boutons
+                document.querySelectorAll('.filter-btn').forEach(btn => {
+                    btn.classList.remove('active');
+                });
+                
+                // Ajouter la classe active au bouton cliqué
+                button.classList.add('active');
+                
+                const filter = button.getAttribute('data-filter');
+                
+                // Afficher les modules en fonction du filtre
+                document.querySelectorAll('.module-card').forEach(card => {
+                    if (filter === 'all') {
+                        card.style.display = 'block';
+                    } else {
+                        if (card.getAttribute('data-category') === filter) {
+                            card.style.display = 'block';
+                        } else {
+                            card.style.display = 'none';
+                        }
+                    }
+                });
+            });
+        });
+        
+        // Message pour les modules en préparation
+        function showPendingMessage() {
+            alert("Ce module est en cours de préparation et sera disponible prochainement.");
+        }
+        
+        // Animation au chargement de la page
+        document.addEventListener('DOMContentLoaded', () => {
+            const cards = document.querySelectorAll('.module-card');
+            cards.forEach((card, index) => {
+                card.style.opacity = '0';
+                card.style.transform = 'translateY(20px)';
+                
+                setTimeout(() => {
+                    card.style.transition = 'opacity 0.5s ease, transform 0.5s ease';
+                    card.style.opacity = '1';
+                    card.style.transform = 'translateY(0)';
+                }, 100 + index * 100);
+            });
+        });
+    </script>
+</body>
+</html>
