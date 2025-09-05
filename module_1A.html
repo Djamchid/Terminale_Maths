@@ -36,35 +36,44 @@
     math{font-family: STIX Math, Cambria Math, "Times New Roman", serif;}
     .module-info{background:rgba(45,212,191,0.1); border:1px solid var(--accent); border-radius:.8rem; padding:12px; margin:12px 0; font-size:.9rem}
     .module-info strong{color:var(--accent)}
+    .language-selector {position: absolute; top: 20px; right: 20px; display: flex; gap: 10px;}
+    .lang-btn {background: var(--panel); border: 1px solid var(--border); color: var(--text); padding: 5px 10px; border-radius: 4px; cursor: pointer;}
+    .lang-btn.active {background: var(--accent); color: #0b0f1a;}
   </style>
 </head>
 <body>
   <div class="wrap">
+    <div class="language-selector">
+      <button class="lang-btn active" data-lang="fr">FR</button>
+      <button class="lang-btn" data-lang="en">EN</button>
+      <button class="lang-btn" data-lang="cn">中文</button>
+    </div>
+    
     <header class="panel">
-      <h1>Terminale Spé Math — <span class="muted">Module 1.A : Dérivation, continuité et limites</span></h1>
+      <h1 data-translate="title">Terminale Spé Math — <span class="muted">Module 1.A : Dérivation, continuité et limites</span></h1>
       <div class="module-info">
-        <strong>Durée estimée :</strong> 60 minutes (Théorie : 12 min, Exercices : 48 min)<br>
-        <strong>Objectifs :</strong> Maîtriser les compléments sur la dérivation, comprendre la continuité et calculer des limites de fonctions.
+        <strong data-translate="duration">Durée estimée :</strong> <span data-translate="durationValue">60 minutes (Théorie : 12 min, Exercices : 48 min)</span><br>
+        <strong data-translate="objectives">Objectifs :</strong> <span data-translate="objectivesValue">Maîtriser les compléments sur la dérivation, comprendre la continuité et calculer des limites de fonctions.</span>
       </div>
-      <p class="muted">Module autonome conforme au programme de Terminale spécialité mathématiques.</p>
+      <p class="muted" data-translate="conformity">Module autonome conforme au programme de Terminale spécialité mathématiques.</p>
       <div class="row" aria-live="polite" style="margin:.5rem 0">
-        <strong>Progression&nbsp;:</strong>
+        <strong data-translate="progress">Progression :</strong>
         <div class="progress" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0" style="flex:1; min-width:240px">
           <div class="bar" id="progressBar"></div>
         </div>
         <span id="progressText" class="muted" style="min-width:100px; text-align:right">0 / 0</span>
       </div>
       <div class="row">
-        <button class="btn" id="checkAll">Tout valider</button>
-        <button class="btn secondary" id="reset">Réinitialiser</button>
+        <button class="btn" id="checkAll" data-translate="validateAll">Tout valider</button>
+        <button class="btn secondary" id="reset" data-translate="reset">Réinitialiser</button>
       </div>
     </header>
 
     <section class="panel">
-      <h2>Théorie (12 minutes)</h2>
+      <h2 data-translate="theoryTitle">Théorie (12 minutes)</h2>
       
-      <h3>Compléments sur la dérivation</h3>
-      <p>La dérivée d'une fonction <math xmlns="http://www.w3.org/1998/Math/MathML"><mi>f</mi></math> en un point <math xmlns="http://www.w3.org/1998/Math/MathML"><mi>a</mi></math> représente le coefficient directeur de la tangente à la courbe au point d'abscisse <math xmlns="http://www.w3.org/1998/Math/MathML"><mi>a</mi></math>.</p>
+      <h3 data-translate="derivationTitle">Compléments sur la dérivation</h3>
+      <p data-translate="derivationDesc">La dérivée d'une fonction <math xmlns="http://www.w3.org/1998/Math/MathML"><mi>f</mi></math> en un point <math xmlns="http://www.w3.org/1998/Math/MathML"><mi>a</mi></math> représente le coefficient directeur de la tangente à la courbe au point d'abscisse <math xmlns="http://www.w3.org/1998/Math/MathML"><mi>a</mi></math>.</p>
       
       <math xmlns="http://www.w3.org/1998/Math/MathML" display="block">
         <mrow>
@@ -81,8 +90,8 @@
         </mrow>
       </math>
       
-      <h3>Continuité des fonctions</h3>
-      <p>Une fonction <math xmlns="http://www.w3.org/1998/Math/MathML"><mi>f</mi></math> est continue en <math xmlns="http://www.w3.org/1998/Math/MathML"><mi>a</mi></math> si :</p>
+      <h3 data-translate="continuityTitle">Continuité des fonctions</h3>
+      <p data-translate="continuityDesc">Une fonction <math xmlns="http://www.w3.org/1998/Math/MathML"><mi>f</mi></math> est continue en <math xmlns="http://www.w3.org/1998/Math/MathML"><mi>a</mi></math> si :</p>
       
       <math xmlns="http://www.w3.org/1998/Math/MathML" display="block">
         <mrow>
@@ -96,8 +105,8 @@
         </mrow>
       </math>
       
-      <h3>Limites de fonctions</h3>
-      <p>La limite d'une fonction étudie son comportement aux bornes de son domaine de définition ou aux points de discontinuité.</p>
+      <h3 data-translate="limitsTitle">Limites de fonctions</h3>
+      <p data-translate="limitsDesc">La limite d'une fonction étudie son comportement aux bornes de son domaine de définition ou aux points de discontinuité.</p>
       
       <math xmlns="http://www.w3.org/1998/Math/MathML" display="block">
         <mrow>
@@ -116,49 +125,67 @@
     </section>
 
     <section class="panel">
-      <h2>Exercices (48 minutes)</h2>
+      <h2 data-translate="exercisesTitle">Exercices (48 minutes)</h2>
 
       <!-- Ex1 : number -->
       <div class="q" data-id="q1" data-type="number" data-answer="6">
-        <label for="q1">
+        <label for="q1" data-translate="q1Label">
           Soit <math xmlns="http://www.w3.org/1998/Math/MathML"><mrow><mi>f</mi><mo>(</mo><mi>x</mi><mo>)</mo><mo>=</mo><msup><mi>x</mi><mn>2</mn></msup><mo>+</mo><mn>2</mn><mi>x</mi></mrow></math>.
           Calculer <math xmlns="http://www.w3.org/1998/Math/MathML"><mrow><msup><mi>f</mi><mo>′</mo></msup><mo>(</mo><mn>2</mn><mo>)</mo></mrow></math>.
         </label>
-        <input id="q1" type="number" inputmode="numeric" placeholder="Entier" />
-        <details><summary>Indice</summary><p>Dériver la fonction puis évaluer en x=2.</p></details>
-        <details><summary>Solution</summary><p>La dérivée est <math xmlns="http://www.w3.org/1998/Math/MathML"><mrow><msup><mi>f</mi><mo>′</mo></msup><mo>(</mo><mi>x</mi><mo>)</mo><mo>=</mo><mn>2</mn><mi>x</mi><mo>+</mo><mn>2</mn></mrow></math>, donc <math xmlns="http://www.w3.org/1998/Math/MathML"><mrow><msup><mi>f</mi><mo>′</mo></msup><mo>(</mo><mn>2</mn><mo>)</mo><mo>=</mo><mn>6</mn></mrow></math>.</p></details>
-        <div class="row"><button class="btn check">Valider</button><span class="tag" data-result=""></span></div>
+        <input id="q1" type="number" inputmode="numeric" placeholder="Entier" data-translate-placeholder="integerPlaceholder" />
+        <details>
+          <summary data-translate="hint">Indice</summary>
+          <p data-translate="q1Hint">Dériver la fonction puis évaluer en x=2.</p>
+        </details>
+        <details>
+          <summary data-translate="solution">Solution</summary>
+          <p data-translate="q1Solution">La dérivée est <math xmlns="http://www.w3.org/1998/Math/MathML"><mrow><msup><mi>f</mi><mo>′</mo></msup><mo>(</mo><mi>x</mi><mo>)</mo><mo>=</mo><mn>2</mn><mi>x</mi><mo>+</mo><mn>2</mn></mrow></math>, donc <math xmlns="http://www.w3.org/1998/Math/MathML"><mrow><msup><mi>f</mi><mo>′</mo></msup><mo>(</mo><mn>2</mn><mo>)</mo><mo>=</mo><mn>6</mn></mrow></math>.</p>
+        </details>
+        <div class="row"><button class="btn check" data-translate="validate">Valider</button><span class="tag" data-result=""></span></div>
       </div>
 
       <!-- Ex2 : single (radio) -->
       <div class="q" data-id="q2" data-type="single" data-answer="b">
-        <label>La fonction <math xmlns="http://www.w3.org/1998/Math/MathML"><mrow><mi>f</mi><mo>(</mo><mi>x</mi><mo>)</mo><mo>=</mo><mfrac><mn>1</mn><mi>x</mi></mfrac></mrow></math> est :</label>
+        <label data-translate="q2Label">La fonction <math xmlns="http://www.w3.org/1998/Math/MathML"><mrow><mi>f</mi><mo>(</mo><mi>x</mi><mo>)</mo><mo>=</mo><mfrac><mn>1</mn><mi>x</mi></mfrac></mrow></math> est :</label>
         <div class="row" role="group" aria-label="Choix unique">
-          <label><input type="radio" name="q2" value="a" /> Continue sur ℝ</label>
-          <label><input type="radio" name="q2" value="b" /> Continue sur ℝ\{0}</label>
-          <label><input type="radio" name="q2" value="c" /> Continue en 0</label>
+          <label><input type="radio" name="q2" value="a" /> <span data-translate="q2Option1">Continue sur ℝ</span></label>
+          <label><input type="radio" name="q2" value="b" /> <span data-translate="q2Option2">Continue sur ℝ\{0}</span></label>
+          <label><input type="radio" name="q2" value="c" /> <span data-translate="q2Option3">Continue en 0</span></label>
         </div>
-        <details><summary>Indice</summary><p>Étudier le domaine de définition et les limites aux bornes.</p></details>
-        <details><summary>Solution</summary><p>La fonction n'est pas définie en 0, donc elle est continue sur ℝ\{0}.</p></details>
-        <div class="row"><button class="btn check">Valider</button><span class="tag" data-result=""></span></div>
+        <details>
+          <summary data-translate="hint">Indice</summary>
+          <p data-translate="q2Hint">Étudier le domaine de définition et les limites aux bornes.</p>
+        </details>
+        <details>
+          <summary data-translate="solution">Solution</summary>
+          <p data-translate="q2Solution">La fonction n'est pas définie en 0, donc elle est continue sur ℝ\{0}.</p>
+        </details>
+        <div class="row"><button class="btn check" data-translate="validate">Valider</button><span class="tag" data-result=""></span></div>
       </div>
 
       <!-- Ex3 : mc (cases) -->
       <div class="q" data-id="q3" data-type="mc" data-answer="a,c">
-        <label>Cocher toutes les affirmations correctes concernant les limites :</label>
+        <label data-translate="q3Label">Cocher toutes les affirmations correctes concernant les limites :</label>
         <div class="row" role="group" aria-label="Choix multiples">
-          <label><input type="checkbox" value="a" /> <math xmlns="http://www.w3.org/1998/Math/MathML"><mrow><munder><mi>lim</mi><mrow><mi>x</mi><mo>→</mo><mo>+</mo><mi>∞</mi></mrow></munder><mfrac><mn>1</mn><mi>x</mi></mfrac><mo>=</mo><mn>0</mn></mrow></math></label>
-          <label><input type="checkbox" value="b" /> <math xmlns="http://www.w3.org/1998/Math/MathML"><mrow><munder><mi>lim</mi><mrow><mi>x</mi><mo>→</mo><mn>0</mn></mrow></munder><mfrac><mn>1</mn><mi>x</mi></mfrac><mo>=</mo><mn>0</mn></mrow></math></label>
-          <label><input type="checkbox" value="c" /> <math xmlns="http://www.w3.org/1998/Math/MathML"><mrow><munder><mi>lim</mi><mrow><mi>x</mi><mo>→</mo><mn>0</mn></mrow></munder><mfrac><mrow><mi>sin</mi><mi>x</mi></mrow><mi>x</mi></mfrac><mo>=</mo><mn>1</mn></mrow></math></label>
+          <label><input type="checkbox" value="a" /> <span data-translate="q3Option1"><math xmlns="http://www.w3.org/1998/Math/MathML"><mrow><munder><mi>lim</mi><mrow><mi>x</mi><mo>→</mo><mo>+</mo><mi>∞</mi></mrow></munder><mfrac><mn>1</mn><mi>x</mi></mfrac><mo>=</mo><mn>0</mn></mrow></math></span></label>
+          <label><input type="checkbox" value="b" /> <span data-translate="q3Option2"><math xmlns="http://www.w3.org/1998/Math/MathML"><mrow><munder><mi>lim</mi><mrow><mi>x</mi><mo>→</mo><mn>0</mn></mrow></munder><mfrac><mn>1</mn><mi>x</mi></mfrac><mo>=</mo><mn>0</mn></mrow></math></span></label>
+          <label><input type="checkbox" value="c" /> <span data-translate="q3Option3"><math xmlns="http://www.w3.org/1998/Math/MathML"><mrow><munder><mi>lim</mi><mrow><mi>x</mi><mo>→</mo><mn>0</mn></mrow></munder><mfrac><mrow><mi>sin</mi><mi>x</mi></mrow><mi>x</mi></mfrac><mo>=</mo><mn>1</mn></mrow></math></span></label>
         </div>
-        <details><summary>Indice</summary><p>Rappelez-vous des limites classiques et des formes indéterminées.</p></details>
-        <details><summary>Solution</summary><p>Vrai : (a) et (c). Faux : (b) car la limite en 0 de 1/x n'existe pas (elle tend vers ±∞).</p></details>
-        <div class="row"><button class="btn check">Valider</button><span class="tag" data-result=""></span></div>
+        <details>
+          <summary data-translate="hint">Indice</summary>
+          <p data-translate="q3Hint">Rappelez-vous des limites classiques et des formes indéterminées.</p>
+        </details>
+        <details>
+          <summary data-translate="solution">Solution</summary>
+          <p data-translate="q3Solution">Vrai : (a) et (c). Faux : (b) car la limite en 0 de 1/x n'existe pas (elle tend vers ±∞).</p>
+        </details>
+        <div class="row"><button class="btn check" data-translate="validate">Valider</button><span class="tag" data-result=""></span></div>
       </div>
 
       <!-- Ex4 : short -->
       <div class="q" data-id="q4" data-type="short" data-answers='["4"]'>
-        <label for="q4">
+        <label for="q4" data-translate="q4Label">
           Calculer la limite suivante : 
           <math xmlns="http://www.w3.org/1998/Math/MathML">
             <mrow>
@@ -173,35 +200,204 @@
             </mrow>
           </math>
         </label>
-        <input id="q4" type="text" placeholder="Votre réponse" />
-        <details><summary>Indice</summary><p>Factoriser le numérateur et simplifier.</p></details>
-        <details><summary>Solution</summary><p>On factorise : <math xmlns="http://www.w3.org/1998/Math/MathML"><mrow><msup><mi>x</mi><mn>2</mn></msup><mo>−</mo><mn>4</mn><mo>=</mo><mo>(</mo><mi>x</mi><mo>−</mo><mn>2</mn><mo>)</mo><mo>(</mo><mi>x</mi><mo>+</mo><mn>2</mn><mo>)</mo></mrow></math>. Après simplification, la limite vaut 4.</p></details>
-        <div class="row"><button class="btn check">Valider</button><span class="tag" data-result=""></span></div>
+        <input id="q4" type="text" placeholder="Votre réponse" data-translate-placeholder="answerPlaceholder" />
+        <details>
+          <summary data-translate="hint">Indice</summary>
+          <p data-translate="q4Hint">Factoriser le numérateur et simplifier.</p>
+        </details>
+        <details>
+          <summary data-translate="solution">Solution</summary>
+          <p data-translate="q4Solution">On factorise : <math xmlns="http://www.w3.org/1998/Math/MathML"><mrow><msup><mi>x</mi><mn>2</mn></msup><mo>−</mo><mn>4</mn><mo>=</mo><mo>(</mo><mi>x</mi><mo>−</mo><mn>2</mn><mo>)</mo><mo>(</mo><mi>x</mi><mo>+</mo><mn>2</mn><mo>)</mo></mrow></math>. Après simplification, la limite vaut 4.</p>
+        </details>
+        <div class="row"><button class="btn check" data-translate="validate">Valider</button><span class="tag" data-result=""></span></div>
       </div>
 
       <!-- Ex5 : single (radio) -->
       <div class="q" data-id="q5" data-type="single" data-answer="c">
-        <label>Le théorème des valeurs intermédiaires s'applique :</label>
+        <label data-translate="q5Label">Le théorème des valeurs intermédiaires s'applique :</label>
         <div class="row" role="group" aria-label="Choix unique">
-          <label><input type="radio" name="q5" value="a" /> À toute fonction</label>
-          <label><input type="radio" name="q5" value="b" /> Uniquement aux fonctions dérivables</label>
-          <label><input type="radio" name="q5" value="c" /> Aux fonctions continues sur un intervalle</label>
+          <label><input type="radio" name="q5" value="a" /> <span data-translate="q5Option1">À toute fonction</span></label>
+          <label><input type="radio" name="q5" value="b" /> <span data-translate="q5Option2">Uniquement aux fonctions dérivables</span></label>
+          <label><input type="radio" name="q5" value="c" /> <span data-translate="q5Option3">Aux fonctions continues sur un intervalle</span></label>
         </div>
-        <details><summary>Indice</summary><p>Rappelez-vous des hypothèses du théorème.</p></details>
-        <details><summary>Solution</summary><p>Le théorème des valeurs intermédiaires s'applique aux fonctions continues sur un intervalle fermé.</p></details>
-        <div class="row"><button class="btn check">Valider</button><span class="tag" data-result=""></span></div>
+        <details>
+          <summary data-translate="hint">Indice</summary>
+          <p data-translate="q5Hint">Rappelez-vous des hypothèses du théorème.</p>
+        </details>
+        <details>
+          <summary data-translate="solution">Solution</summary>
+          <p data-translate="q5Solution">Le théorème des valeurs intermédiaires s'applique aux fonctions continues sur un intervalle fermé.</p>
+        </details>
+        <div class="row"><button class="btn check" data-translate="validate">Valider</button><span class="tag" data-result=""></span></div>
       </div>
-
     </section>
 
     <footer class="panel muted">
-      <small>Module 1.A : Compléments sur la dérivation, continuité et limites — Terminale Spécialité Mathématiques</small>
+      <small data-translate="footer">Module 1.A : Compléments sur la dérivation, continuité et limites — Terminale Spécialité Mathématiques</small>
     </footer>
   </div>
 
   <script>
     // ======== Configuration minimale ========
     const STORAGE_KEY = "interactive_course_progress_v1";
+    const LANG_STORAGE_KEY = "interactive_course_language";
+    
+    // ======== Traductions ========
+    const translations = {
+      fr: {
+        title: "Terminale Spé Math — Module 1.A : Dérivation, continuité et limites",
+        duration: "Durée estimée :",
+        durationValue: "60 minutes (Théorie : 12 min, Exercices : 48 min)",
+        objectives: "Objectifs :",
+        objectivesValue: "Maîtriser les compléments sur la dérivation, comprendre la continuité et calculer des limites de fonctions.",
+        conformity: "Module autonome conforme au programme de Terminale spécialité mathématiques.",
+        progress: "Progression :",
+        validateAll: "Tout valider",
+        reset: "Réinitialiser",
+        theoryTitle: "Théorie (12 minutes)",
+        derivationTitle: "Compléments sur la dérivation",
+        derivationDesc: "La dérivée d'une fonction f en un point a représente le coefficient directeur de la tangente à la courbe au point d'abscisse a.",
+        continuityTitle: "Continuité des fonctions",
+        continuityDesc: "Une fonction f est continue en a si :",
+        limitsTitle: "Limites de fonctions",
+        limitsDesc: "La limite d'une fonction étudie son comportement aux bornes de son domaine de définition ou aux points de discontinuité.",
+        exercisesTitle: "Exercices (48 minutes)",
+        q1Label: "Soit f(x)=x²+2x. Calculer f'(2).",
+        integerPlaceholder: "Entier",
+        hint: "Indice",
+        q1Hint: "Dériver la fonction puis évaluer en x=2.",
+        solution: "Solution",
+        q1Solution: "La dérivée est f'(x)=2x+2, donc f'(2)=6.",
+        validate: "Valider",
+        q2Label: "La fonction f(x)=1/x est :",
+        q2Option1: "Continue sur ℝ",
+        q2Option2: "Continue sur ℝ\\{0}",
+        q2Option3: "Continue en 0",
+        q2Hint: "Étudier le domaine de définition et les limites aux bornes.",
+        q2Solution: "La fonction n'est pas définie en 0, donc elle est continue sur ℝ\\{0}.",
+        q3Label: "Cocher toutes les affirmations correctes concernant les limites :",
+        q3Option1: "lim(x→+∞) 1/x = 0",
+        q3Option2: "lim(x→0) 1/x = 0",
+        q3Option3: "lim(x→0) sin(x)/x = 1",
+        q3Hint: "Rappelez-vous des limites classiques et des formes indéterminées.",
+        q3Solution: "Vrai : (a) et (c). Faux : (b) car la limite en 0 de 1/x n'existe pas (elle tend vers ±∞).",
+        q4Label: "Calculer la limite suivante : lim(x→2) (x²-4)/(x-2)",
+        answerPlaceholder: "Votre réponse",
+        q4Hint: "Factoriser le numérateur et simplifier.",
+        q4Solution: "On factorise : x²-4=(x-2)(x+2). Après simplification, la limite vaut 4.",
+        q5Label: "Le théorème des valeurs intermédiaires s'applique :",
+        q5Option1: "À toute fonction",
+        q5Option2: "Uniquement aux fonctions dérivables",
+        q5Option3: "Aux fonctions continues sur un intervalle",
+        q5Hint: "Rappelez-vous des hypothèses du théorème.",
+        q5Solution: "Le théorème des valeurs intermédiaires s'applique aux fonctions continues sur un intervalle fermé.",
+        footer: "Module 1.A : Compléments sur la dérivation, continuité et limites — Terminale Spécialité Mathématiques",
+        correct: "✅ Correct",
+        incorrect: "❌ À revoir"
+      },
+      en: {
+        title: "Final Year Math Specialization — Module 1.A: Derivatives, Continuity and Limits",
+        duration: "Estimated duration:",
+        durationValue: "60 minutes (Theory: 12 min, Exercises: 48 min)",
+        objectives: "Objectives:",
+        objectivesValue: "Master derivatives, understand continuity and calculate function limits.",
+        conformity: "Self-contained module following the final year math specialization curriculum.",
+        progress: "Progress:",
+        validateAll: "Validate all",
+        reset: "Reset",
+        theoryTitle: "Theory (12 minutes)",
+        derivationTitle: "Further study of derivatives",
+        derivationDesc: "The derivative of a function f at a point a represents the slope of the tangent to the curve at the point with x-coordinate a.",
+        continuityTitle: "Function continuity",
+        continuityDesc: "A function f is continuous at a if:",
+        limitsTitle: "Function limits",
+        limitsDesc: "The limit of a function studies its behavior at the boundaries of its domain or at discontinuity points.",
+        exercisesTitle: "Exercises (48 minutes)",
+        q1Label: "Let f(x)=x²+2x. Calculate f'(2).",
+        integerPlaceholder: "Integer",
+        hint: "Hint",
+        q1Hint: "Differentiate the function then evaluate at x=2.",
+        solution: "Solution",
+        q1Solution: "The derivative is f'(x)=2x+2, so f'(2)=6.",
+        validate: "Validate",
+        q2Label: "The function f(x)=1/x is:",
+        q2Option1: "Continuous on ℝ",
+        q2Option2: "Continuous on ℝ\\{0}",
+        q2Option3: "Continuous at 0",
+        q2Hint: "Study the domain of definition and limits at boundaries.",
+        q2Solution: "The function is not defined at 0, so it is continuous on ℝ\\{0}.",
+        q3Label: "Check all correct statements about limits:",
+        q3Option1: "lim(x→+∞) 1/x = 0",
+        q3Option2: "lim(x→0) 1/x = 0",
+        q3Option3: "lim(x→0) sin(x)/x = 1",
+        q3Hint: "Remember the classical limits and indeterminate forms.",
+        q3Solution: "True: (a) and (c). False: (b) because the limit at 0 of 1/x does not exist (it tends to ±∞).",
+        q4Label: "Calculate the following limit: lim(x→2) (x²-4)/(x-2)",
+        answerPlaceholder: "Your answer",
+        q4Hint: "Factor the numerator and simplify.",
+        q4Solution: "We factor: x²-4=(x-2)(x+2). After simplification, the limit is 4.",
+        q5Label: "The intermediate value theorem applies to:",
+        q5Option1: "All functions",
+        q5Option2: "Only differentiable functions",
+        q5Option3: "Functions continuous on an interval",
+        q5Hint: "Remember the hypotheses of the theorem.",
+        q5Solution: "The intermediate value theorem applies to functions continuous on a closed interval.",
+        footer: "Module 1.A: Derivatives, Continuity and Limits — Final Year Math Specialization",
+        correct: "✅ Correct",
+        incorrect: "❌ Review needed"
+      },
+      cn: {
+        title: "高中数学专业 — 模块 1.A: 导数、连续性和极限",
+        duration: "预计时长:",
+        durationValue: "60 分钟 (理论: 12 分钟, 练习: 48 分钟)",
+        objectives: "目标:",
+        objectivesValue: "掌握导数，理解连续性并计算函数极限。",
+        conformity: "遵循高中数学专业课程的自包含模块。",
+        progress: "进度:",
+        validateAll: "全部验证",
+        reset: "重置",
+        theoryTitle: "理论 (12 分钟)",
+        derivationTitle: "导数的进一步研究",
+        derivationDesc: "函数 f 在点 a 处的导数表示曲线在横坐标为 a 的点处切线的斜率。",
+        continuityTitle: "函数连续性",
+        continuityDesc: "函数 f 在 a 处连续，如果:",
+        limitsTitle: "函数极限",
+        limitsDesc: "函数的极限研究其在其定义域边界或不连续点处的行为。",
+        exercisesTitle: "练习 (48 分钟)",
+        q1Label: "设 f(x)=x²+2x。计算 f'(2)。",
+        integerPlaceholder: "整数",
+        hint: "提示",
+        q1Hint: "对函数求导然后在 x=2 处求值。",
+        solution: "解答",
+        q1Solution: "导数为 f'(x)=2x+2，因此 f'(2)=6。",
+        validate: "验证",
+        q2Label: "函数 f(x)=1/x 是:",
+        q2Option1: "在 ℝ 上连续",
+        q2Option2: "在 ℝ\\{0} 上连续",
+        q2Option3: "在 0 处连续",
+        q2Hint: "研究定义域和边界处的极限。",
+        q2Solution: "该函数在 0 处未定义，因此它在 ℝ\\{0} 上连续。",
+        q3Label: "勾选所有关于极限的正确陈述:",
+        q3Option1: "lim(x→+∞) 1/x = 0",
+        q3Option2: "lim(x→0) 1/x = 0",
+        q3Option3: "lim(x→0) sin(x)/x = 1",
+        q3Hint: "记住经典极限和不定式。",
+        q3Solution: "正确: (a) 和 (c)。错误: (b) 因为 1/x 在 0 处的极限不存在（它趋于 ±∞）。",
+        q4Label: "计算以下极限: lim(x→2) (x²-4)/(x-2)",
+        answerPlaceholder: "您的答案",
+        q4Hint: "分解分子并简化。",
+        q4Solution: "我们分解: x²-4=(x-2)(x+2)。简化后，极限为 4。",
+        q5Label: "中间值定理适用于:",
+        q5Option1: "所有函数",
+        q5Option2: "仅可微函数",
+        q5Option3: "在区间上连续的函数",
+        q5Hint: "记住定理的假设。",
+        q5Solution: "中间值定理适用于在闭区间上连续的函数。",
+        footer: "模块 1.A: 导数、连续性和极限 — 高中数学专业",
+        correct: "✅ 正确",
+        incorrect: "❌ 需要复习"
+      }
+    };
 
     // ======== Utilitaires ========
     const $ = (sel, root=document) => root.querySelector(sel);
@@ -224,6 +420,43 @@
       return true;
     }
 
+    // ======== Gestion de la langue ========
+    function setLanguage(lang) {
+      // Sauvegarder la préférence
+      localStorage.setItem(LANG_STORAGE_KEY, lang);
+      
+      // Mettre à jour les boutons de langue
+      $$('.lang-btn').forEach(btn => {
+        btn.classList.toggle('active', btn.dataset.lang === lang);
+      });
+      
+      // Mettre à jour les textes
+      const dict = translations[lang];
+      document.querySelectorAll('[data-translate]').forEach(el => {
+        const key = el.getAttribute('data-translate');
+        if (dict[key]) {
+          if (el.tagName === 'INPUT' && el.hasAttribute('data-translate-placeholder')) {
+            el.placeholder = dict[el.getAttribute('data-translate-placeholder')];
+          } else {
+            el.textContent = dict[key];
+          }
+        }
+      });
+      
+      // Mettre à jour les attributs placeholder séparément
+      document.querySelectorAll('[data-translate-placeholder]').forEach(el => {
+        if (el.tagName === 'INPUT') {
+          const key = el.getAttribute('data-translate-placeholder');
+          if (dict[key]) {
+            el.placeholder = dict[key];
+          }
+        }
+      });
+      
+      // Mettre à jour le titre de la page
+      document.title = dict.title;
+    }
+
     // ======== Persistance ========
     function loadState(){
       try { return JSON.parse(localStorage.getItem(STORAGE_KEY) || "{}"); }
@@ -238,6 +471,8 @@
       const type = q.dataset.type;
       const id = q.dataset.id;
       let ok = false, userVal = null;
+      const lang = localStorage.getItem(LANG_STORAGE_KEY) || 'fr';
+      const dict = translations[lang];
 
       if(type === "number"){
         const input = $("input[type='number']", q);
@@ -269,8 +504,8 @@
       const tag = $("[data-result]", q);
       if(tag){
         tag.classList.remove("ok","err");
-        if(ok){ tag.classList.add("ok"); tag.textContent = "✅ Correct"; }
-        else{ tag.classList.add("err"); tag.textContent = "❌ À revoir"; }
+        if(ok){ tag.classList.add("ok"); tag.textContent = dict.correct; }
+        else{ tag.classList.add("err"); tag.textContent = dict.incorrect; }
       }
       return { ok, userVal };
     }
@@ -296,9 +531,11 @@
         $$("input[type='checkbox']", q).forEach(c => { c.checked = set.has(c.value); });
       }
       // Afficher l'état précédent si on veut :
+      const lang = localStorage.getItem(LANG_STORAGE_KEY) || 'fr';
+      const dict = translations[lang];
       if(rec.correct === true){
         const tag = $("[data-result]", q);
-        if(tag){ tag.classList.add("ok"); tag.textContent = "✅ Correct"; }
+        if(tag){ tag.classList.add("ok"); tag.textContent = dict.correct; }
       }
     }
 
@@ -315,6 +552,17 @@
 
     // ======== Initialisation ========
     document.addEventListener("DOMContentLoaded", () => {
+      // Charger la langue sauvegardée ou utiliser le français par défaut
+      const savedLang = localStorage.getItem(LANG_STORAGE_KEY) || 'fr';
+      setLanguage(savedLang);
+      
+      // Gestion des clics sur les boutons de langue
+      $$('.lang-btn').forEach(btn => {
+        btn.addEventListener('click', () => {
+          setLanguage(btn.dataset.lang);
+        });
+      });
+      
       const state = loadState();
       const questions = $$(".q");
       questions.forEach(q => applyStateToQuestion(q, state));
