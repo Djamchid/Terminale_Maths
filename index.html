@@ -41,6 +41,7 @@
             text-align: center;
             margin-bottom: 40px;
             padding: 20px;
+            position: relative;
         }
         
         h1 {
@@ -54,6 +55,37 @@
             color: var(--secondary);
             max-width: 800px;
             margin: 0 auto;
+        }
+        
+        .language-selector {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            display: flex;
+            gap: 5px;
+            background: white;
+            border-radius: 50px;
+            padding: 5px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        
+        .lang-btn {
+            padding: 8px 15px;
+            border: none;
+            border-radius: 50px;
+            background: transparent;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+        
+        .lang-btn:hover {
+            background: var(--light);
+        }
+        
+        .lang-btn.active {
+            background: var(--primary);
+            color: white;
         }
         
         .filters {
@@ -200,12 +232,23 @@
             h1 {
                 font-size: 2rem;
             }
+            
+            .language-selector {
+                position: static;
+                justify-content: center;
+                margin-top: 15px;
+            }
         }
     </style>
 </head>
 <body>
     <div class="container">
         <header>
+            <div class="language-selector">
+                <button class="lang-btn active" data-lang="fr">FR</button>
+                <button class="lang-btn" data-lang="en">EN</button>
+                <button class="lang-btn" data-lang="cn">中文</button>
+            </div>
             <h1>Sélecteur de Modules - Terminale Spé Math</h1>
             <p class="subtitle">Sélectionnez un module pour accéder au cours interactif. Chaque module est conçu pour une séance d'une heure.</p>
         </header>
@@ -385,6 +428,38 @@
                 }, 100 + index * 100);
             });
         });
+        
+        // Sélecteur de langue
+        document.querySelectorAll('.lang-btn').forEach(button => {
+            button.addEventListener('click', () => {
+                // Retirer la classe active de tous les boutons de langue
+                document.querySelectorAll('.lang-btn').forEach(btn => {
+                    btn.classList.remove('active');
+                });
+                
+                // Ajouter la classe active au bouton cliqué
+                button.classList.add('active');
+                
+                const lang = button.getAttribute('data-lang');
+                changeLanguage(lang);
+            });
+        });
+        
+        // Fonction pour changer la langue (exemple basique)
+        function changeLanguage(lang) {
+            // Dans une implémentation réelle, on chargerait les traductions
+            // Pour cet exemple, nous allons simplement afficher un message
+            const langNames = {
+                'fr': 'français',
+                'en': 'anglais',
+                'cn': 'chinois'
+            };
+            
+            alert(`Langue changée en ${langNames[lang]}. Dans une implémentation complète, tout le contenu serait traduit.`);
+            
+            // Ici, on ajouterait le code pour réellement traduire l'interface
+            // Par exemple : document.querySelector('h1').textContent = translations[lang].title;
+        }
     </script>
 </body>
 </html>
