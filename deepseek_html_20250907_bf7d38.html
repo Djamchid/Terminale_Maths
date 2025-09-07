@@ -1,0 +1,657 @@
+<!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Terminale Spé Math - Module 2.A : Suites et raisonnement par récurrence</title>
+  <style>
+    :root{
+      --bg:#0f1220; --panel:#141828; --text:#e9eef7;
+      --muted:#9aa4b2; --ok:#1db954; --warn:#ffb020; --err:#ff4d4f; --accent:#2dd4bf;
+      --border:#233045;
+    }
+    html,body{background:var(--bg); color:var(--text); font:16px/1.5 system-ui,Segoe UI,Roboto,Helvetica,Arial,sans-serif; margin:0;}
+    .wrap{max-width:960px; margin:0 auto; padding:24px; position: relative;}
+    h1{font-size:1.6rem; margin:0 0 8px;}
+    h2{font-size:1.4rem; margin:1.5rem 0 0.8rem;}
+    h3{font-size:1.2rem; margin:1.2rem 0 0.6rem;}
+    .muted{color:var(--muted)}
+    .row{display:flex; gap:.5rem; align-items:center; flex-wrap:wrap}
+    .btn{background:var(--accent); border:none; color:#0b0f1a; padding:.5rem .8rem; border-radius:.6rem; cursor:pointer; font-weight:600}
+    .btn.secondary{background:#1f2537; color:var(--text); border:1px solid var(--border)}
+    .panel{background:var(--panel); border:1px solid var(--border); border-radius:1rem; padding:16px; box-shadow:0 8px 20px rgba(0,0,0,.25); margin:16px 0}
+    .q{border:1px dashed var(--border); border-radius:.8rem; padding:12px; margin:12px 0}
+    label{display:block; margin-bottom:.4rem; font-weight:600}
+    input[type="text"],input[type="number"]{width:100%; max-width:420px; padding:.45rem .6rem; border-radius:.5rem; border:1px solid var(--border); background:#0d1220; color:var(--text)}
+    details{margin:.25rem 0}
+    summary{cursor:pointer}
+    .tag{display:inline-flex; align-items:center; gap:.4rem; border-radius:999px; padding:.2rem .6rem; border:1px solid var(--border); background:#10162a; font-size:.9rem}
+    .tag.ok{border-color:rgba(29,185,84,.35); background:rgba(29,185,84,.1); color:#a7f3d0}
+    .tag.err{border-color:rgba(255,77,79,.35); background:rgba(255,77,79,.08); color:#fecaca}
+    .progress{height:12px; background:#0b0f1a; border:1px solid var(--border); border-radius:999px; overflow:hidden}
+    .bar{height:100%; width:0%; background:linear-gradient(90deg,var(--accent),#60a5fa); transition:width .25s ease}
+    .grid{display:grid; gap:16px}
+    @media(min-width:860px){ .grid.cols-2{grid-template-columns:1fr 1fr} }
+    math[display="block"]{display:block; margin:.6rem 0}
+    math{font-family: STIX Math, Cambria Math, "Times New Roman", serif;}
+    .module-info{background:rgba(45,212,191,0.1); border:1px solid var(--accent); border-radius:.8rem; padding:12px; margin:12px 0; font-size:.9rem}
+    .module-info strong{color:var(--accent)}
+    .language-selector {position: absolute; top: 20px; right: 20px; display: flex; gap: 8px;}
+    .lang-btn {background: var(--panel); border: 1px solid var(--border); color: var(--text); padding: 4px 8px; border-radius: 4px; cursor: pointer; font-size: 0.8rem;}
+    .lang-btn.active {background: var(--accent); color: #0b0f1a;}
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <div class="language-selector">
+      <button class="lang-btn active" data-lang="fr">FR</button>
+      <button class="lang-btn" data-lang="en">EN</button>
+      <button class="lang-btn" data-lang="cn">中文</button>
+    </div>
+    
+    <header class="panel">
+      <h1 data-translate="title">Terminale Spé Math — <span class="muted">Module 2.A : Suites et raisonnement par récurrence</span></h1>
+      <div class="module-info">
+        <strong data-translate="duration">Durée estimée :</strong> <span data-translate="durationValue">60 minutes (Théorie : 12 min, Exercices : 48 min)</span><br>
+        <strong data-translate="objectives">Objectifs :</strong> <span data-translate="objectivesValue">Comprendre les suites numériques et maîtriser le raisonnement par récurrence.</span>
+      </div>
+      <p class="muted" data-translate="conformity">Module autonome conforme au programme de Terminale spécialité mathématiques.</p>
+      <div class="row" aria-live="polite" style="margin:.5rem 0">
+        <strong data-translate="progressLabel">Progression :</strong>
+        <div class="progress" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0" style="flex:1; min-width:240px">
+          <div class="bar" id="progressBar"></div>
+        </div>
+        <span id="progressText" class="muted" style="min-width:100px; text-align:right">0 / 0</span>
+      </div>
+      <div class="row">
+        <button class="btn" id="checkAll" data-translate="validateAll">Tout valider</button>
+        <button class="btn secondary" id="reset" data-translate="reset">Réinitialiser</button>
+      </div>
+    </header>
+
+    <section class="panel">
+      <h2 data-translate="theoryTitle">Théorie (12 minutes)</h2>
+      
+      <h3 data-translate="sequencesTitle">Suites numériques</h3>
+      <p data-translate="sequencesDesc">Une suite numérique est une fonction définie sur l'ensemble des entiers naturels. On note généralement <math xmlns="http://www.w3.org/1998/Math/MathML"><msub><mi>u</mi><mi>n</mi></msub></math> le terme de rang <math xmlns="http://www.w3.org/1998/Math/MathML"><mi>n</mi></math>.</p>
+      
+      <math xmlns="http://www.w3.org/1998/Math/MathML" display="block">
+        <mrow>
+          <msub><mi>u</mi><mi>n</mi></msub>
+          <mo>=</mo>
+          <mi>f</mi><mo>(</mo><mi>n</mi><mo>)</mo>
+        </mrow>
+      </math>
+      
+      <h3 data-translate="recurrenceTitle">Raisonnement par récurrence</h3>
+      <p data-translate="recurrenceDesc">Le raisonnement par récurrence permet de démontrer qu'une propriété est vraie pour tous les entiers naturels. Il comporte trois étapes :</p>
+      
+      <ol>
+        <li data-translate="recurrenceStep1">Initialisation : Vérifier que la propriété est vraie au rang initial (généralement n=0 ou n=1).</li>
+        <li data-translate="recurrenceStep2">Hérédité : Démontrer que si la propriété est vraie à un rang n, alors elle est vraie au rang n+1.</li>
+        <li data-translate="recurrenceStep3">Conclusion : La propriété est vraie pour tous les entiers à partir du rang initial.</li>
+      </ol>
+      
+      <math xmlns="http://www.w3.org/1998/Math/MathML" display="block">
+        <mrow>
+          <msub><mi>u</mi><mrow><mi>n</mi><mo>+</mo><mn>1</mn></mrow></msub>
+          <mo>=</mo>
+          <mn>2</mn>
+          <msub><mi>u</mi><mi>n</mi></msub>
+          <mo>+</mo>
+          <mn>3</mn>
+        </mrow>
+      </math>
+      
+      <h3 data-translate="arithmeticTitle">Suites arithmétiques et géométriques</h3>
+      <p data-translate="arithmeticDesc">Une suite est arithmétique si la différence entre deux termes consécutifs est constante. Une suite est géométrique si le quotient entre deux termes consécutifs est constant.</p>
+      
+      <math xmlns="http://www.w3.org/1998/Math/MathML" display="block">
+        <mtable columnalign="left">
+          <mtr>
+            <mtd>
+              <mtext>Arithmétique: </mtext>
+            </mtd>
+            <mtd>
+              <msub><mi>u</mi><mrow><mi>n</mi><mo>+</mo><mn>1</mn></mrow></msub>
+              <mo>=</mo>
+              <msub><mi>u</mi><mi>n</mi></msub>
+              <mo>+</mo>
+              <mi>r</mi>
+            </mtd>
+          </mtr>
+          <mtr>
+            <mtd>
+              <mtext>Géométrique: </mtext>
+            </mtd>
+            <mtd>
+              <msub><mi>u</mi><mrow><mi>n</mi><mo>+</mo><mn>1</mn></mrow></msub>
+              <mo>=</mo>
+              <msub><mi>u</mi><mi>n</mi></msub>
+              <mo>&#xD7;</mo>
+              <mi>q</mi>
+            </mtd>
+          </mtr>
+        </mtable>
+      </math>
+    </section>
+
+    <section class="panel">
+      <h2 data-translate="exercisesTitle">Exercices (48 minutes)</h2>
+
+      <!-- Ex1 : number -->
+      <div class="q" data-id="q1" data-type="number" data-answer="5">
+        <label for="q1" data-translate="q1Label">
+          Soit <math xmlns="http://www.w3.org/1998/Math/MathML"><msub><mi>u</mi><mi>n</mi></msub></math> une suite arithmétique de premier terme <math xmlns="http://www.w3.org/1998/Math/MathML"><msub><mi>u</mi><mn>0</mn></msub><mo>=</mo><mn>2</mn></math> et de raison <math xmlns="http://www.w3.org/1998/Math/MathML"><mi>r</mi><mo>=</mo><mn>3</mn></math>.
+          Calculer <math xmlns="http://www.w3.org/1998/Math/MathML"><msub><mi>u</mi><mn>1</mn></msub></math>.
+        </label>
+        <input id="q1" type="number" inputmode="numeric" placeholder="Entier" data-translate-placeholder="integerPlaceholder" />
+        <details>
+          <summary data-translate="hint">Indice</summary>
+          <p data-translate="q1Hint">Utiliser la formule des suites arithmétiques : <math xmlns="http://www.w3.org/1998/Math/MathML"><msub><mi>u</mi><mrow><mi>n</mi><mo>+</mo><mn>1</mn></mrow></msub><mo>=</mo><msub><mi>u</mi><mi>n</mi></msub><mo>+</mo><mi>r</mi></math>.</p>
+        </details>
+        <details>
+          <summary data-translate="solution">Solution</summary>
+          <p data-translate="q1Solution"><math xmlns="http://www.w3.org/1998/Math/MathML"><msub><mi>u</mi><mn>1</mn></msub><mo>=</mo><msub><mi>u</mi><mn>0</mn></msub><mo>+</mo><mi>r</mi><mo>=</mo><mn>2</mn><mo>+</mo><mn>3</mn><mo>=</mo><mn>5</mn></math></p>
+        </details>
+        <div class="row"><button class="btn check" data-translate="validate">Valider</button><span class="tag" data-result=""></span></div>
+      </div>
+
+      <!-- Ex2 : single (radio) -->
+      <div class="q" data-id="q2" data-type="single" data-answer="b">
+        <label data-translate="q2Label">Soit <math xmlns="http://www.w3.org/1998/Math/MathML"><msub><mi>u</mi><mi>n</mi></msub></math> une suite géométrique de premier terme <math xmlns="http://www.w3.org/1998/Math/MathML"><msub><mi>u</mi><mn>0</mn></msub><mo>=</mo><mn>5</mn></math> et de raison <math xmlns="http://www.w3.org/1998/Math/MathML"><mi>q</mi><mo>=</mo><mn>2</mn></math>. Quelle est l'expression de <math xmlns="http://www.w3.org/1998/Math/MathML"><msub><mi>u</mi><mi>n</mi></msub></math> en fonction de <math xmlns="http://www.w3.org/1998/Math/MathML"><mi>n</mi></math>?</label>
+        <div class="row" role="group" aria-label="Choix unique">
+          <label><input type="radio" name="q2" value="a" /> <span data-translate="q2Option1"><math xmlns="http://www.w3.org/1998/Math/MathML"><msub><mi>u</mi><mi>n</mi></msub><mo>=</mo><mn>5</mn><mo>+</mo><mn>2</mn><mi>n</mi></math></span></label>
+          <label><input type="radio" name="q2" value="b" /> <span data-translate="q2Option2"><math xmlns="http://www.w3.org/1998/Math/MathML"><msub><mi>u</mi><mi>n</mi></msub><mo>=</mo><mn>5</mn><mo>&#xD7;</mo><msup><mn>2</mn><mi>n</mi></msup></math></span></label>
+          <label><input type="radio" name="q2" value="c" /> <span data-translate="q2Option3"><math xmlns="http://www.w3.org/1998/Math/MathML"><msub><mi>u</mi><mi>n</mi></msub><mo>=</mo><mn>2</mn><mo>&#xD7;</mo><msup><mn>5</mn><mi>n</mi></msup></math></span></label>
+        </div>
+        <details>
+          <summary data-translate="hint">Indice</summary>
+          <p data-translate="q2Hint">Utiliser la formule des suites géométriques : <math xmlns="http://www.w3.org/1998/Math/MathML"><msub><mi>u</mi><mi>n</mi></msub><mo>=</mo><msub><mi>u</mi><mn>0</mn></msub><mo>&#xD7;</mo><msup><mi>q</mi><mi>n</mi></msup></math>.</p>
+        </details>
+        <details>
+          <summary data-translate="solution">Solution</summary>
+          <p data-translate="q2Solution">La formule correcte est <math xmlns="http://www.w3.org/1998/Math/MathML"><msub><mi>u</mi><mi>n</mi></msub><mo>=</mo><mn>5</mn><mo>&#xD7;</mo><msup><mn>2</mn><mi>n</mi></msup></math>.</p>
+        </details>
+        <div class="row"><button class="btn check" data-translate="validate">Valider</button><span class="tag" data-result=""></span></div>
+      </div>
+
+      <!-- Ex3 : mc (cases) -->
+      <div class="q" data-id="q3" data-type="mc" data-answer="a,c">
+        <label data-translate="q3Label">Cocher toutes les affirmations correctes concernant le raisonnement par récurrence :</label>
+        <div class="row" role="group" aria-label="Choix multiples">
+          <label><input type="checkbox" value="a" /> <span data-translate="q3Option1">Il comporte une étape d'initialisation.</span></label>
+          <label><input type="checkbox" value="b" /> <span data-translate="q3Option2">Il permet de démontrer une propriété pour un nombre fini de valeurs.</span></label>
+          <label><input type="checkbox" value="c" /> <span data-translate="q3Option3">Il comporte une étape d'hérédité.</span></label>
+        </div>
+        <details>
+          <summary data-translate="hint">Indice</summary>
+          <p data-translate="q3Hint">Le raisonnement par récurrence permet de démontrer une propriété pour tous les entiers naturels (infini).</p>
+        </details>
+        <details>
+          <summary data-translate="solution">Solution</summary>
+          <p data-translate="q3Solution">Vrai : (a) et (c). Faux : (b) car le raisonnement par récurrence permet de démontrer une propriété pour une infinité de valeurs.</p>
+        </details>
+        <div class="row"><button class="btn check" data-translate="validate">Valider</button><span class="tag" data-result=""></span></div>
+      </div>
+
+      <!-- Ex4 : short -->
+      <div class="q" data-id="q4" data-type="short" data-answers='["32"]'>
+        <label for="q4" data-translate="q4Label">
+          Soit <math xmlns="http://www.w3.org/1998/Math/MathML"><msub><mi>u</mi><mi>n</mi></msub></math> une suite géométrique de premier terme <math xmlns="http://www.w3.org/1998/Math/MathML"><msub><mi>u</mi><mn>0</mn></msub><mo>=</mo><mn>1</mn></math> et de raison <math xmlns="http://www.w3.org/1998/Math/MathML"><mi>q</mi><mo>=</mo><mn>2</mn></math>.
+          Calculer <math xmlns="http://www.w3.org/1998/Math/MathML"><msub><mi>u</mi><mn>5</mn></msub></math>.
+        </label>
+        <input id="q4" type="text" placeholder="Votre réponse" data-translate-placeholder="answerPlaceholder" />
+        <details>
+          <summary data-translate="hint">Indice</summary>
+          <p data-translate="q4Hint">Utiliser la formule <math xmlns="http://www.w3.org/1998/Math/MathML"><msub><mi>u</mi><mi>n</mi></msub><mo>=</mo><msub><mi>u</mi><mn>0</mn></msub><mo>&#xD7;</mo><msup><mi>q</mi><mi>n</mi></msup></math>.</p>
+        </details>
+        <details>
+          <summary data-translate="solution">Solution</summary>
+          <p data-translate="q4Solution"><math xmlns="http://www.w3.org/1998/Math/MathML"><msub><mi>u</mi><mn>5</mn></msub><mo>=</mo><mn>1</mn><mo>&#xD7;</mo><msup><mn>2</mn><mn>5</mn></msup><mo>=</mo><mn>32</mn></math></p>
+        </details>
+        <div class="row"><button class="btn check" data-translate="validate">Valider</button><span class="tag" data-result=""></span></div>
+      </div>
+
+      <!-- Ex5 : single (radio) -->
+      <div class="q" data-id="q5" data-type="single" data-answer="c">
+        <label data-translate="q5Label">Quelle est la propriété caractéristique d'une suite arithmétique?</label>
+        <div class="row" role="group" aria-label="Choix unique">
+          <label><input type="radio" name="q5" value="a" /> <span data-translate="q5Option1">Le quotient de deux termes consécutifs est constant.</span></label>
+          <label><input type="radio" name="q5" value="b" /> <span data-translate="q5Option2">Chaque terme est obtenu en multipliant le précédent par un nombre fixe.</span></label>
+          <label><input type="radio" name="q5" value="c" /> <span data-translate="q5Option3">La différence entre deux termes consécutifs est constante.</span></label>
+        </div>
+        <details>
+          <summary data-translate="hint">Indice</summary>
+          <p data-translate="q5Hint">Se rappeler de la définition d'une suite arithmétique.</p>
+        </details>
+        <details>
+          <summary data-translate="solution">Solution</summary>
+          <p data-translate="q5Solution">La propriété caractéristique d'une suite arithmétique est que la différence entre deux termes consécutifs est constante.</p>
+        </details>
+        <div class="row"><button class="btn check" data-translate="validate">Valider</button><span class="tag" data-result=""></span></div>
+      </div>
+
+    </section>
+
+    <footer class="panel muted">
+      <small data-translate="footer">Module 2.A : Suites et raisonnement par récurrence — Terminale Spécialité Mathématiques</small>
+    </footer>
+  </div>
+
+  <script>
+    // ======== Configuration minimale ========
+    const STORAGE_KEY = "interactive_course_progress_v1";
+    const LANG_STORAGE_KEY = "interactive_course_language";
+    
+    // ======== Traductions ========
+    const translations = {
+      fr: {
+        title: "Terminale Spé Math — Module 2.A : Suites et raisonnement par récurrence",
+        duration: "Durée estimée :",
+        durationValue: "60 minutes (Théorie : 12 min, Exercices : 48 min)",
+        objectives: "Objectifs :",
+        objectivesValue: "Comprendre les suites numériques et maîtriser le raisonnement par récurrence.",
+        conformity: "Module autonome conforme au programme de Terminale spécialité mathématiques.",
+        progressLabel: "Progression :",
+        validateAll: "Tout valider",
+        reset: "Réinitialiser",
+        theoryTitle: "Théorie (12 minutes)",
+        sequencesTitle: "Suites numériques",
+        sequencesDesc: "Une suite numérique est une fonction définie sur l'ensemble des entiers naturels. On note généralement uₙ le terme de rang n.",
+        recurrenceTitle: "Raisonnement par récurrence",
+        recurrenceDesc: "Le raisonnement par récurrence permet de démontrer qu'une propriété est vraie pour tous les entiers naturels. Il comporte trois étapes :",
+        recurrenceStep1: "Initialisation : Vérifier que la propriété est vraie au rang initial (généralement n=0 ou n=1).",
+        recurrenceStep2: "Hérédité : Démontrer que si la propriété est vraie à un rang n, alors elle est vraie au rang n+1.",
+        recurrenceStep3: "Conclusion : La propriété est vraie pour tous les entiers à partir du rang initial.",
+        arithmeticTitle: "Suites arithmétiques et géométriques",
+        arithmeticDesc: "Une suite est arithmétique si la différence entre deux termes consécutifs est constante. Une suite est géométrique si le quotient entre deux termes consécutifs est constant.",
+        exercisesTitle: "Exercices (48 minutes)",
+        q1Label: "Soit uₙ une suite arithmétique de premier terme u₀=2 et de raison r=3. Calculer u₁.",
+        integerPlaceholder: "Entier",
+        hint: "Indice",
+        q1Hint: "Utiliser la formule des suites arithmétiques : uₙ₊₁ = uₙ + r.",
+        solution: "Solution",
+        q1Solution: "u₁ = u₀ + r = 2 + 3 = 5",
+        validate: "Valider",
+        q2Label: "Soit uₙ une suite géométrique de premier terme u₀=5 et de raison q=2. Quelle est l'expression de uₙ en fonction de n?",
+        q2Option1: "uₙ = 5 + 2n",
+        q2Option2: "uₙ = 5 × 2ⁿ",
+        q2Option3: "uₙ = 2 × 5ⁿ",
+        q2Hint: "Utiliser la formule des suites géométriques : uₙ = u₀ × qⁿ.",
+        q2Solution: "La formule correcte est uₙ = 5 × 2ⁿ.",
+        q3Label: "Cocher toutes les affirmations correctes concernant le raisonnement par récurrence :",
+        q3Option1: "Il comporte une étape d'initialisation.",
+        q3Option2: "Il permet de démontrer une propriété pour un nombre fini de valeurs.",
+        q3Option3: "Il comporte une étape d'hérédité.",
+        q3Hint: "Le raisonnement par récurrence permet de démontrer une propriété pour tous les entiers naturels (infini).",
+        q3Solution: "Vrai : (a) et (c). Faux : (b) car le raisonnement par récurrence permet de démontrer une propriété pour une infinité de valeurs.",
+        q4Label: "Soit uₙ une suite géométrique de premier terme u₀=1 et de raison q=2. Calculer u₅.",
+        answerPlaceholder: "Votre réponse",
+        q4Hint: "Utiliser la formule uₙ = u₀ × qⁿ.",
+        q4Solution: "u₅ = 1 × 2⁵ = 32",
+        q5Label: "Quelle est la propriété caractéristique d'une suite arithmétique?",
+        q5Option1: "Le quotient de deux termes consécutifs est constant.",
+        q5Option2: "Chaque terme est obtenu en multipliant le précédent par un nombre fixe.",
+        q5Option3: "La différence entre deux termes consécutifs est constante.",
+        q5Hint: "Se rappeler de la définition d'une suite arithmétique.",
+        q5Solution: "La propriété caractéristique d'une suite arithmétique est que la différence entre deux termes consécutifs est constante.",
+        footer: "Module 2.A : Suites et raisonnement par récurrence — Terminale Spécialité Mathématiques",
+        correct: "✅ Correct",
+        incorrect: "❌ À revoir"
+      },
+      en: {
+        title: "Final Year Math Specialization — Module 2.A: Sequences and Mathematical Induction",
+        duration: "Estimated duration:",
+        durationValue: "60 minutes (Theory: 12 min, Exercises: 48 min)",
+        objectives: "Objectives:",
+        objectivesValue: "Understand numerical sequences and master mathematical induction.",
+        conformity: "Self-contained module following the final year math specialization curriculum.",
+        progressLabel: "Progress:",
+        validateAll: "Validate all",
+        reset: "Reset",
+        theoryTitle: "Theory (12 minutes)",
+        sequencesTitle: "Numerical sequences",
+        sequencesDesc: "A numerical sequence is a function defined on the set of natural numbers. We usually denote uₙ as the term of rank n.",
+        recurrenceTitle: "Mathematical induction",
+        recurrenceDesc: "Mathematical induction allows us to prove that a property is true for all natural numbers. It consists of three steps:",
+        recurrenceStep1: "Initialization: Verify that the property is true at the initial rank (usually n=0 or n=1).",
+        recurrenceStep2: "Heredity: Prove that if the property is true at rank n, then it is true at rank n+1.",
+        recurrenceStep3: "Conclusion: The property is true for all integers from the initial rank.",
+        arithmeticTitle: "Arithmetic and geometric sequences",
+        arithmeticDesc: "A sequence is arithmetic if the difference between two consecutive terms is constant. A sequence is geometric if the quotient between two consecutive terms is constant.",
+        exercisesTitle: "Exercises (48 minutes)",
+        q1Label: "Let uₙ be an arithmetic sequence with first term u₀=2 and common difference r=3. Calculate u₁.",
+        integerPlaceholder: "Integer",
+        hint: "Hint",
+        q1Hint: "Use the formula for arithmetic sequences: uₙ₊₁ = uₙ + r.",
+        solution: "Solution",
+        q1Solution: "u₁ = u₀ + r = 2 + 3 = 5",
+        validate: "Validate",
+        q2Label: "Let uₙ be a geometric sequence with first term u₀=5 and common ratio q=2. What is the expression of uₙ as a function of n?",
+        q2Option1: "uₙ = 5 + 2n",
+        q2Option2: "uₙ = 5 × 2ⁿ",
+        q2Option3: "uₙ = 2 × 5ⁿ",
+        q2Hint: "Use the formula for geometric sequences: uₙ = u₀ × qⁿ.",
+        q2Solution: "The correct formula is uₙ = 5 × 2ⁿ.",
+        q3Label: "Check all correct statements about mathematical induction:",
+        q3Option1: "It includes an initialization step.",
+        q3Option2: "It allows proving a property for a finite number of values.",
+        q3Option3: "It includes a heredity step.",
+        q3Hint: "Mathematical induction allows proving a property for all natural numbers (infinite).",
+        q3Solution: "True: (a) and (c). False: (b) because mathematical induction allows proving a property for an infinite number of values.",
+        q4Label: "Let uₙ be a geometric sequence with first term u₀=1 and common ratio q=2. Calculate u₅.",
+        answerPlaceholder: "Your answer",
+        q4Hint: "Use the formula uₙ = u₀ × qⁿ.",
+        q4Solution: "u₅ = 1 × 2⁵ = 32",
+        q5Label: "What is the characteristic property of an arithmetic sequence?",
+        q5Option1: "The quotient of two consecutive terms is constant.",
+        q5Option2: "Each term is obtained by multiplying the previous one by a fixed number.",
+        q5Option3: "The difference between two consecutive terms is constant.",
+        q5Hint: "Remember the definition of an arithmetic sequence.",
+        q5Solution: "The characteristic property of an arithmetic sequence is that the difference between two consecutive terms is constant.",
+        footer: "Module 2.A: Sequences and Mathematical Induction — Final Year Math Specialization",
+        correct: "✅ Correct",
+        incorrect: "❌ Review needed"
+      },
+      cn: {
+        title: "高中数学专业 — 模块 2.A: 数列和数学归纳法",
+        duration: "预计时长:",
+        durationValue: "60 分钟 (理论: 12 分钟, 练习: 48 分钟)",
+        objectives: "目标:",
+        objectivesValue: "理解数列并掌握数学归纳法。",
+        conformity: "遵循高中数学专业课程的自包含模块。",
+        progressLabel: "进度：",
+        validateAll: "全部验证",
+        reset: "重置",
+        theoryTitle: "理论 (12 分钟)",
+        sequencesTitle: "数列",
+        sequencesDesc: "数列是定义在自然数集上的函数。通常用 uₙ 表示第 n 项。",
+        recurrenceTitle: "数学归纳法",
+        recurrenceDesc: "数学归纳法用于证明一个性质对所有自然数成立。它包含三个步骤：",
+        recurrenceStep1: "初始化：验证该性质在初始项（通常是 n=0 或 n=1）成立。",
+        recurrenceStep2: "遗传性：证明如果该性质在第 n 项成立，那么它在第 n+1 项也成立。",
+        recurrenceStep3: "结论：该性质从初始项开始对所有整数成立。",
+        arithmeticTitle: "等差数列和等比数列",
+        arithmeticDesc: "如果连续两项之间的差是常数，则该数列是等差数列。如果连续两项之间的比是常数，则该数列是等比数列。",
+        exercisesTitle: "练习 (48 分钟)",
+        q1Label: "设 uₙ 是一个等差数列，首项 u₀=2，公差 r=3。计算 u₁。",
+        integerPlaceholder: "整数",
+        hint: "提示",
+        q1Hint: "使用等差数列公式：uₙ₊₁ = uₙ + r。",
+        solution: "解答",
+        q1Solution: "u₁ = u₀ + r = 2 + 3 = 5",
+        validate: "验证",
+        q2Label: "设 uₙ 是一个等比数列，首项 u₀=5，公比 q=2。uₙ 关于 n 的表达式是什么？",
+        q2Option1: "uₙ = 5 + 2n",
+        q2Option2: "uₙ = 5 × 2ⁿ",
+        q2Option3: "uₙ = 2 × 5ⁿ",
+        q2Hint: "使用等比数列公式：uₙ = u₀ × qⁿ。",
+        q2Solution: "正确的公式是 uₙ = 5 × 2ⁿ。",
+        q3Label: "勾选所有关于数学归纳法的正确陈述：",
+        q3Option1: "它包括一个初始化步骤。",
+        q3Option2: "它允许证明一个性质对有限个值成立。",
+        q3Option3: "它包括一个遗传性步骤。",
+        q3Hint: "数学归纳法允许证明一个性质对所有自然数（无限）成立。",
+        q3Solution: "正确: (a) 和 (c)。错误: (b) 因为数学归纳法允许证明一个性质对无限个值成立。",
+        q4Label: "设 uₙ 是一个等比数列，首项 u₀=1，公比 q=2。计算 u₅。",
+        answerPlaceholder: "您的答案",
+        q4Hint: "使用公式 uₙ = u₀ × qⁿ。",
+        q4Solution: "u₅ = 1 × 2⁵ = 32",
+        q5Label: "等差数列的特征性质是什么？",
+        q5Option1: "连续两项的比是常数。",
+        q5Option2: "每一项是通过前一项乘以一个固定数得到的。",
+        q5Option3: "连续两项的差是常数。",
+        q5Hint: "记住等差数列的定义。",
+        q5Solution: "等差数列的特征性质是连续两项之间的差是常数。",
+        footer: "模块 2.A: 数列和数学归纳法 — 高中数学专业",
+        correct: "✅ 正确",
+        incorrect: "❌ 需要复习"
+      }
+    };
+
+    // ======== Utilitaires ========
+    const $ = (sel, root=document) => root.querySelector(sel);
+    const $$ = (sel, root=document) => Array.from(root.querySelectorAll(sel));
+    const byId = id => document.getElementById(id);
+
+    function normalizeText(s){
+      return (s ?? "")
+        .toString()
+        .trim()
+        .toLowerCase()
+        .replace(/\s+/g," ")
+        .replace(/[’'`]/g,"'")
+        .replace(/[\u200B-\u200D\uFEFF]/g,""); // zero-width
+    }
+
+    function eqSet(a, b){
+      if(a.size !== b.size) return false;
+      for(const v of a) if(!b.has(v)) return false;
+      return true;
+    }
+
+    // ======== Gestion de la langue ========
+    function setLanguage(lang) {
+      // Sauvegarder la préférence
+      localStorage.setItem(LANG_STORAGE_KEY, lang);
+      
+      // Mettre à jour les boutons de langue
+      $$('.lang-btn').forEach(btn => {
+        btn.classList.toggle('active', btn.dataset.lang === lang);
+      });
+      
+      // Mettre à jour les textes
+      const dict = translations[lang];
+      document.querySelectorAll('[data-translate]').forEach(el => {
+        const key = el.getAttribute('data-translate');
+        if (dict[key]) {
+          if (el.tagName === 'INPUT' && el.hasAttribute('data-translate-placeholder')) {
+            el.placeholder = dict[el.getAttribute('data-translate-placeholder')];
+          } else {
+            el.textContent = dict[key];
+          }
+        }
+      });
+      
+      // Mettre à jour les attributs placeholder séparément
+      document.querySelectorAll('[data-translate-placeholder]').forEach(el => {
+        if (el.tagName === 'INPUT') {
+          const key = el.getAttribute('data-translate-placeholder');
+          if (dict[key]) {
+            el.placeholder = dict[key];
+          }
+        }
+      });
+      
+      // Mettre à jour le titre de la page
+      document.title = dict.title;
+    }
+
+    // ======== Persistance ========
+    function loadState(){
+      try { return JSON.parse(localStorage.getItem(STORAGE_KEY) || "{}"); }
+      catch { return {}; }
+    }
+    function saveState(state){
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+    }
+
+    // ======== Validation par type ========
+    function validateQuestion(q){
+      const type = q.dataset.type;
+      const id = q.dataset.id;
+      let ok = false, userVal = null;
+      const lang = localStorage.getItem(LANG_STORAGE_KEY) || 'fr';
+      const dict = translations[lang];
+
+      if(type === "number"){
+        const input = $("input[type='number']", q);
+        const expected = Number(q.dataset.answer);
+        userVal = Number(input.value);
+        ok = Number.isFinite(userVal) && (userVal === expected);
+      }
+      else if(type === "short"){
+        const input = $("input[type='text']", q);
+        userVal = normalizeText(input.value);
+        let answers = [];
+        try { answers = JSON.parse(q.dataset.answers || "[]").map(normalizeText); }
+        catch {}
+        ok = answers.includes(userVal);
+      }
+      else if(type === "single"){
+        const name = $$("input[type='radio']", q)[0]?.name;
+        const checked = $(`input[type='radio'][name="${name}"]:checked`);
+        userVal = checked?.value || null;
+        ok = (userVal === q.dataset.answer);
+      }
+      else if(type === "mc"){
+        const expected = new Set((q.dataset.answer || "").split(",").map(v => v.trim()).filter(Boolean));
+        const chosen = new Set($$("input[type='checkbox']:checked", q).map(el => el.value));
+        userVal = Array.from(chosen);
+        ok = eqSet(chosen, expected);
+      }
+
+      const tag = $("[data-result]", q);
+      if(tag){
+        tag.classList.remove("ok","err");
+        if(ok){ tag.classList.add("ok"); tag.textContent = dict.correct; }
+        else{ tag.classList.add("err"); tag.textContent = dict.incorrect; }
+      }
+      return { ok, userVal };
+    }
+
+    function applyStateToQuestion(q, state){
+      const id = q.dataset.id;
+      const rec = state[id];
+      if(!rec) return;
+
+      if(q.dataset.type === "number"){
+        const input = $("input[type='number']", q);
+        if(rec.input != null) input.value = rec.input;
+      }
+      else if(q.dataset.type === "short"){
+        const input = $("input[type='text']", q);
+        if(rec.input != null) input.value = rec.input;
+      }
+      else if(q.dataset.type === "single"){
+        $$("input[type='radio']", q).forEach(r => { r.checked = (r.value === rec.checked); });
+      }
+      else if(q.dataset.type === "mc"){
+        const set = new Set(rec.checked || []);
+        $$("input[type='checkbox']", q).forEach(c => { c.checked = set.has(c.value); });
+      }
+      // Afficher l'état précédent si on veut :
+      const lang = localStorage.getItem(LANG_STORAGE_KEY) || 'fr';
+      const dict = translations[lang];
+      if(rec.correct === true){
+        const tag = $("[data-result]", q);
+        if(tag){ tag.classList.add("ok"); tag.textContent = dict.correct; }
+      }
+    }
+
+    function updateProgress(){
+      const questions = $$(".q");
+      const total = questions.length;
+      const ok = questions.filter(q => $("[data-result]", q)?.classList.contains("ok")).length;
+      const pct = total ? Math.round(100 * ok / total) : 0;
+      byId("progressBar").style.width = pct + "%";
+      const pb = $(".progress");
+      pb?.setAttribute("aria-valuenow", String(pct));
+      byId("progressText").textContent = `${ok} / ${total}`;
+    }
+
+    // ======== Initialisation ========
+    document.addEventListener("DOMContentLoaded", () => {
+      // Charger la langue sauvegardée ou utiliser le français par défaut
+      const savedLang = localStorage.getItem(LANG_STORAGE_KEY) || 'fr';
+      setLanguage(savedLang);
+      
+      // Gestion des clics sur les boutons de langue
+      $$('.lang-btn').forEach(btn => {
+        btn.addEventListener('click', () => {
+          setLanguage(btn.dataset.lang);
+        });
+      });
+      
+      const state = loadState();
+      const questions = $$(".q");
+      questions.forEach(q => applyStateToQuestion(q, state));
+      updateProgress();
+
+      // Boutons "Valider" par question
+      $$(".q .check").forEach(btn => {
+        btn.addEventListener("click", () => {
+          const q = btn.closest(".q");
+          const id = q.dataset.id;
+          const {ok, userVal} = validateQuestion(q);
+          // Sauvegarde
+          const st = loadState();
+          if(q.dataset.type === "number" || q.dataset.type === "short"){
+            const input = q.dataset.type === "number" ? $("input[type='number']", q) : $("input[type='text']", q);
+            st[id] = { input: input.value, correct: ok };
+          }else if(q.dataset.type === "single"){
+            const name = $$("input[type='radio']", q)[0]?.name;
+            const checked = $(`input[type='radio'][name="${name}"]:checked`, q)?.value ?? null;
+            st[id] = { checked, correct: ok };
+          }else if(q.dataset.type === "mc"){
+            st[id] = { checked: userVal, correct: ok };
+          }
+          saveState(st);
+          updateProgress();
+        });
+      });
+
+      // Tout valider
+      byId("checkAll").addEventListener("click", () => {
+        const st = loadState();
+        let firstWrong = null;
+        $$(".q").forEach(q => {
+          const id = q.dataset.id;
+          const {ok, userVal} = validateQuestion(q);
+          if(firstWrong == null && !ok) firstWrong = q;
+          if(q.dataset.type === "number" || q.dataset.type === "short"){
+            const input = q.dataset.type === "number" ? $("input[type='number']", q) : $("input[type='text']", q);
+            st[id] = { input: input.value, correct: ok };
+          }else if(q.dataset.type === "single"){
+            const name = $$("input[type='radio']", q)[0]?.name;
+            const checked = $(`input[type='radio'][name="${name}"]:checked`, q)?.value ?? null;
+            st[id] = { checked, correct: ok };
+          }else if(q.dataset.type === "mc"){
+            st[id] = { checked: userVal, correct: ok };
+          }
+        });
+        saveState(st);
+        updateProgress();
+        if(firstWrong) firstWrong.scrollIntoView({behavior:"smooth", block:"center"});
+      });
+
+      // Réinitialiser
+      byId("reset").addEventListener("click", () => {
+        localStorage.removeItem(STORAGE_KEY);
+        $$(".q").forEach(q => {
+          const tag = $("[data-result]", q);
+          tag?.classList.remove("ok","err");
+          tag && (tag.textContent = "");
+          $$("input[type='text'],input[type='number']", q).forEach(i => i.value = "");
+          $$("input[type='radio']", q).forEach(r => r.checked = false);
+          $$("input[type='checkbox']", q).forEach(c => c.checked = false);
+        });
+        updateProgress();
+      });
+
+      // Raccourcis clavier utiles
+      document.addEventListener("keydown", (e) => {
+        const activeQ = document.activeElement?.closest?.(".q");
+        if(!activeQ) return;
+        if(e.key === "Enter"){ e.preventDefault(); activeQ.querySelector(".check")?.click(); }
+        if(e.key.toLowerCase() === "h"){ activeQ.querySelector("details")?.setAttribute("open",""); }
+        if(e.key.toLowerCase() === "s"){
+          const sols = Array.from(activeQ.querySelectorAll("details"));
+          sols[1]?.setAttribute("open","");
+        }
+      });
+    });
+  </script>
+</body>
+</html>
