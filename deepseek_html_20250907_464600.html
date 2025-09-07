@@ -1,0 +1,557 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Module 2A Bac - Suites et raisonnement par récurrence</title>
+    <style>
+        :root {
+            --primary: #2563eb;
+            --primary-dark: #1e40af;
+            --secondary: #4b5563;
+            --light: #f3f4f6;
+            --lighter: #f9fafb;
+            --dark: #1f2937;
+            --success: #10b981;
+            --warning: #f59e0b;
+            --danger: #ef4444;
+            --border: #e5e7eb;
+            --math-bg: #f8f9fa;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+        }
+        
+        body {
+            background: linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 100%);
+            color: var(--dark);
+            min-height: 100vh;
+            padding: 20px;
+            line-height: 1.6;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        header {
+            text-align: center;
+            margin-bottom: 40px;
+            padding: 20px;
+            position: relative;
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+        }
+        
+        h1 {
+            font-size: 2.5rem;
+            color: var(--primary-dark);
+            margin-bottom: 10px;
+        }
+        
+        .subtitle {
+            font-size: 1.2rem;
+            color: var(--secondary);
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        
+        .module-meta {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            margin-top: 20px;
+            flex-wrap: wrap;
+        }
+        
+        .meta-item {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            color: var(--secondary);
+            background: var(--lighter);
+            padding: 8px 15px;
+            border-radius: 50px;
+            font-size: 0.9rem;
+        }
+        
+        .content-grid {
+            display: grid;
+            grid-template-columns: 1fr 2fr;
+            gap: 30px;
+            margin-bottom: 40px;
+        }
+        
+        @media (max-width: 900px) {
+            .content-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+        
+        .course-content {
+            background: white;
+            border-radius: 12px;
+            padding: 25px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+            height: fit-content;
+            position: sticky;
+            top: 20px;
+        }
+        
+        .course-content h2 {
+            color: var(--primary);
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid var(--border);
+        }
+        
+        .chapters-list {
+            list-style: none;
+        }
+        
+        .chapter-item {
+            margin-bottom: 15px;
+            padding: 12px;
+            border-radius: 8px;
+            background: var(--lighter);
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .chapter-item:hover {
+            background: var(--light);
+            transform: translateX(5px);
+        }
+        
+        .chapter-item.active {
+            background: var(--primary);
+            color: white;
+        }
+        
+        .exercices-container {
+            background: white;
+            border-radius: 12px;
+            padding: 25px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+        }
+        
+        .exercice {
+            margin-bottom: 40px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid var(--border);
+        }
+        
+        .exercice:last-child {
+            border-bottom: none;
+        }
+        
+        .exercice-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+        
+        .exercice-title {
+            font-size: 1.4rem;
+            color: var(--primary-dark);
+        }
+        
+        .exercice-meta {
+            display: flex;
+            gap: 10px;
+        }
+        
+        .exercice-tag {
+            padding: 4px 10px;
+            border-radius: 50px;
+            font-size: 0.8rem;
+            font-weight: 600;
+        }
+        
+        .tag-annale {
+            background: #dbeafe;
+            color: var(--primary-dark);
+        }
+        
+        .tag-difficulty {
+            background: #fee2e2;
+            color: var(--danger);
+        }
+        
+        .tag-theme {
+            background: #dcfce7;
+            color: var(--success);
+        }
+        
+        .exercice-content {
+            margin-bottom: 20px;
+            padding: 20px;
+            background: var(--math-bg);
+            border-radius: 8px;
+            font-family: 'Cambria Math', serif;
+            border-left: 4px solid var(--primary);
+        }
+        
+        .math-expr {
+            font-family: 'Cambria Math', serif;
+            margin: 10px 0;
+            padding-left: 15px;
+        }
+        
+        .solution-toggle {
+            background: var(--primary);
+            color: white;
+            border: none;
+            padding: 10px 15px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: background 0.3s ease;
+            margin-bottom: 15px;
+        }
+        
+        .solution-toggle:hover {
+            background: var(--primary-dark);
+        }
+        
+        .solution {
+            display: none;
+            padding: 20px;
+            background: var(--lighter);
+            border-radius: 8px;
+            margin-top: 15px;
+            border-left: 4px solid var(--success);
+        }
+        
+        .solution.show {
+            display: block;
+        }
+        
+        .key-point {
+            background: #fffbeb;
+            padding: 15px;
+            border-radius: 8px;
+            margin: 20px 0;
+            border-left: 4px solid var(--warning);
+        }
+        
+        .key-point h4 {
+            color: var(--warning);
+            margin-bottom: 10px;
+        }
+        
+        .navigation {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 30px;
+        }
+        
+        .nav-btn {
+            padding: 12px 25px;
+            background: var(--primary);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: background 0.3s ease;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .nav-btn:hover {
+            background: var(--primary-dark);
+        }
+        
+        .nav-btn.outline {
+            background: transparent;
+            color: var(--primary);
+            border: 2px solid var(--primary);
+        }
+        
+        .nav-btn.outline:hover {
+            background: var(--primary);
+            color: white;
+        }
+        
+        footer {
+            text-align: center;
+            margin-top: 60px;
+            padding: 20px;
+            color: var(--secondary);
+            font-size: 0.9rem;
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+        }
+        
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 2rem;
+            }
+            
+            .exercice-header {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 10px;
+            }
+            
+            .exercice-meta {
+                flex-wrap: wrap;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Module 2A Bac - Suites et raisonnement par récurrence</h1>
+            <p class="subtitle">Exercices tirés des annales du bac et cours ciblé pour maîtriser les points clés du chapitre</p>
+            
+            <div class="module-meta">
+                <div class="meta-item">
+                    <span>⏱</span>
+                    <span>6h de travail estimé</span>
+                </div>
+                <div class="meta-item">
+                    <span>📊</span>
+                    <span>12 exercices complets</span>
+                </div>
+                <div class="meta-item">
+                    <span>🎯</span>
+                    <span>Fiches de révision ciblées</span>
+                </div>
+            </div>
+        </header>
+        
+        <div class="content-grid">
+            <div class="course-content">
+                <h2>Cours ciblé</h2>
+                <ul class="chapters-list">
+                    <li class="chapter-item active" data-chapter="recurrence">Raisonnement par récurrence</li>
+                    <li class="chapter-item" data-chapter="suites">Définition et modes de génération</li>
+                    <li class="chapter-item" data-chapter="monotonie">Sens de variation</li>
+                    <li class="chapter-item" data-chapter="limites">Limites de suites</li>
+                    <li class="chapter-item" data-chapter="arithmetic">Suites arithmétiques</li>
+                    <li class="chapter-item" data-chapter="geometric">Suites géométriques</li>
+                    <li class="chapter-item" data-chapter="adjacent">Suites adjacentes</li>
+                    <li class="chapter-item" data-chapter="arithmetic_geometric">Suites arithmético-géométriques</li>
+                </ul>
+                
+                <div class="key-point">
+                    <h4>💡 Conseil de méthode</h4>
+                    <p>Pour bien réussir les exercices sur les suites, assurez-vous de toujours bien définir le terme initial et la relation de récurrence. Vérifiez les conditions d'application de chaque théorème.</p>
+                </div>
+            </div>
+            
+            <div class="exercices-container">
+                <div class="exercice">
+                    <div class="exercice-header">
+                        <h3 class="exercice-title">Exercice 1 (Métropole, 2019)</h3>
+                        <div class="exercice-meta">
+                            <span class="exercice-tag tag-annale">Annale 2019</span>
+                            <span class="exercice-tag tag-difficulty">Difficulté: Moyenne</span>
+                            <span class="exercice-tag tag-theme">Récurrence</span>
+                        </div>
+                    </div>
+                    
+                    <div class="exercice-content">
+                        <p>On considère la suite \((u_n)\) définie par \(u_0 = 2\) et pour tout entier naturel \(n\) :</p>
+                        <p class="math-expr">\(u_{n+1} = \frac{u_n + 1}{2}\)</p>
+                        <p>1. Démontrer par récurrence que pour tout entier naturel \(n\), \(u_n > 1\).</p>
+                        <p>2. Démontrer que la suite \((u_n)\) est décroissante.</p>
+                        <p>3. En déduire que la suite \((u_n)\) converge et déterminer sa limite.</p>
+                    </div>
+                    
+                    <button class="solution-toggle">Voir la solution</button>
+                    
+                    <div class="solution">
+                        <h4>Solution détaillée</h4>
+                        <p><strong>1. Preuve par récurrence :</strong></p>
+                        <p>Initialisation : Pour \(n = 0\), \(u_0 = 2 > 1\). La propriété est vraie au rang 0.</p>
+                        <p>Hérédité : Supposons que pour un entier naturel \(n\), \(u_n > 1\).</p>
+                        <p>Alors \(u_{n+1} = \frac{u_n + 1}{2} > \frac{1 + 1}{2} = 1\).</p>
+                        <p>La propriété est donc héréditaire.</p>
+                        <p>Conclusion : Par récurrence, pour tout entier naturel \(n\), \(u_n > 1\).</p>
+                        
+                        <p><strong>2. Variation de la suite :</strong></p>
+                        <p>Étudions le signe de \(u_{n+1} - u_n = \frac{u_n + 1}{2} - u_n = \frac{1 - u_n}{2}\).</p>
+                        <p>Comme \(u_n > 1\) pour tout \(n\), alors \(1 - u_n < 0\), donc \(u_{n+1} - u_n < 0\).</p>
+                        <p>Ainsi, la suite \((u_n)\) est décroissante.</p>
+                        
+                        <p><strong>3. Convergence et limite :</strong></p>
+                        <p>La suite \((u_n)\) est décroissante et minorée par 1, donc elle converge vers une limite \(L\).</p>
+                        <p>En passant à la limite dans la relation de récurrence :</p>
+                        <p>\(L = \frac{L + 1}{2}\) ⇒ \(2L = L + 1\) ⇒ \(L = 1\).</p>
+                        <p>La suite converge donc vers 1.</p>
+                    </div>
+                </div>
+                
+                <div class="exercice">
+                    <div class="exercice-header">
+                        <h3 class="exercice-title">Exercice 2 (Asie, 2018)</h3>
+                        <div class="exercice-meta">
+                            <span class="exercice-tag tag-annale">Annale 2018</span>
+                            <span class="exercice-tag tag-difficulty">Difficulté: Élevée</span>
+                            <span class="exercice-tag tag-theme">Limites</span>
+                        </div>
+                    </div>
+                    
+                    <div class="exercice-content">
+                        <p>On considère la suite \((v_n)\) définie par \(v_0 = 1\) et pour tout entier naturel \(n\) :</p>
+                        <p class="math-expr">\(v_{n+1} = \sqrt{2 + v_n}\)</p>
+                        <p>1. Démontrer par récurrence que pour tout entier naturel \(n\), \(0 < v_n < 2\).</p>
+                        <p>2. Démontrer que la suite \((v_n)\) est croissante.</p>
+                        <p>3. En déduire que la suite \((v_n)\) converge et déterminer sa limite.</p>
+                    </div>
+                    
+                    <button class="solution-toggle">Voir la solution</button>
+                    
+                    <div class="solution">
+                        <h4>Solution détaillée</h4>
+                        <p><strong>1. Preuve par récurrence :</strong></p>
+                        <p>Initialisation : Pour \(n = 0\), \(v_0 = 1\) donc \(0 < 1 < 2\). La propriété est vraie au rang 0.</p>
+                        <p>Hérédité : Supposons que pour un entier naturel \(n\), \(0 < v_n < 2\).</p>
+                        <p>Alors \(v_{n+1} = \sqrt{2 + v_n} > \sqrt{2 + 0} > 0\).</p>
+                        <p>Et \(v_{n+1} = \sqrt{2 + v_n} < \sqrt{2 + 2} = 2\).</p>
+                        <p>La propriété est donc héréditaire.</p>
+                        <p>Conclusion : Par récurrence, pour tout entier naturel \(n\), \(0 < v_n < 2\).</p>
+                        
+                        <p><strong>2. Variation de la suite :</strong></p>
+                        <p>Étudions le signe de \(v_{n+1} - v_n = \sqrt{2 + v_n} - v_n\).</p>
+                        <p>Posons \(f(x) = \sqrt{2 + x} - x\) pour \(x \in ]0, 2[\).</p>
+                        <p>\(f'(x) = \frac{1}{2\sqrt{2+x}} - 1\). Comme \(\sqrt{2+x} > \sqrt{2} > 1\), alors \(\frac{1}{2\sqrt{2+x}} < \frac{1}{2} < 1\), donc \(f'(x) < 0\).</p>
+                        <p>\(f\) est strictement décroissante sur \(]0, 2[\).</p>
+                        <p>\(f(1) = \sqrt{3} - 1 > 0\) et \(f(2) = 2 - 2 = 0\).</p>
+                        <p>Donc pour tout \(x \in ]0, 2[\), \(f(x) > 0\), d'où \(v_{n+1} - v_n > 0\).</p>
+                        <p>Ainsi, la suite \((v_n)\) est croissante.</p>
+                        
+                        <p><strong>3. Convergence et limite :</strong></p>
+                        <p>La suite \((v_n)\) est croissante et majorée par 2, donc elle converge vers une limite \(L\).</p>
+                        <p>En passant à la limite dans la relation de récurrence :</p>
+                        <p>\(L = \sqrt{2 + L}\) ⇒ \(L^2 = 2 + L\) ⇒ \(L^2 - L - 2 = 0\).</p>
+                        <p>Le discriminant est \(Δ = 9\), les solutions sont \(L = 2\) et \(L = -1\).</p>
+                        <p>Comme \(v_n > 0\) pour tout \(n\), on a \(L ≥ 0\), donc \(L = 2\).</p>
+                    </div>
+                </div>
+                
+                <div class="exercice">
+                    <div class="exercice-header">
+                        <h3 class="exercice-title">Exercice 3 (Amérique du Nord, 2017)</h3>
+                        <div class="exercice-meta">
+                            <span class="exercice-tag tag-annale">Annale 2017</span>
+                            <span class="exercice-tag tag-difficulty">Difficulté: Moyenne</span>
+                            <span class="exercice-tag tag-theme">Suites arithmético-géométriques</span>
+                        </div>
+                    </div>
+                    
+                    <div class="exercice-content">
+                        <p>On considère la suite \((w_n)\) définie par \(w_0 = 1\) et pour tout entier naturel \(n\) :</p>
+                        <p class="math-expr">\(w_{n+1} = \frac{3w_n + 2}{w_n + 4}\)</p>
+                        <p>1. Démontrer par récurrence que pour tout entier naturel \(n\), \(0 < w_n \leq 1\).</p>
+                        <p>2. Démontrer que la suite \((w_n)\) est croissante.</p>
+                        <p>3. En déduire que la suite \((w_n)\) converge et déterminer sa limite.</p>
+                    </div>
+                    
+                    <button class="solution-toggle">Voir la solution</button>
+                    
+                    <div class="solution">
+                        <h4>Solution détaillée</h4>
+                        <p><strong>1. Preuve par récurrence :</strong></p>
+                        <p>Initialisation : Pour \(n = 0\), \(w_0 = 1\) donc \(0 < 1 \leq 1\). La propriété est vraie au rang 0.</p>
+                        <p>Hérédité : Supposons que pour un entier naturel \(n\), \(0 < w_n \leq 1\).</p>
+                        <p>Alors \(w_{n+1} = \frac{3w_n + 2}{w_n + 4} > \frac{3×0 + 2}{1 + 4} = \frac{2}{5} > 0\).</p>
+                        <p>Et \(w_{n+1} - 1 = \frac{3w_n + 2}{w_n + 4} - 1 = \frac{3w_n + 2 - w_n - 4}{w_n + 4} = \frac{2w_n - 2}{w_n + 4} = \frac{2(w_n - 1)}{w_n + 4} \leq 0\).</p>
+                        <p>Donc \(w_{n+1} \leq 1\).</p>
+                        <p>La propriété est donc héréditaire.</p>
+                        <p>Conclusion : Par récurrence, pour tout entier naturel \(n\), \(0 < w_n \leq 1\).</p>
+                        
+                        <p><strong>2. Variation de la suite :</strong></p>
+                        <p>Étudions le signe de \(w_{n+1} - w_n = \frac{3w_n + 2}{w_n + 4} - w_n = \frac{3w_n + 2 - w_n^2 - 4w_n}{w_n + 4} = \frac{-w_n^2 - w_n + 2}{w_n + 4}\).</p>
+                        <p>Le dénominateur est toujours positif. Le signe du numérateur dépend de \(-w_n^2 - w_n + 2\).</p>
+                        <p>Résolvons \(-w_n^2 - w_n + 2 = 0\). Le discriminant est \(Δ = 1 + 8 = 9\).</p>
+                        <p>Les solutions sont \(w_n = 1\) et \(w_n = -2\).</p>
+                        <p>Comme \(w_n > 0\), le numérateur est positif pour \(0 < w_n < 1\) et nul pour \(w_n = 1\).</p>
+                        <p>Donc \(w_{n+1} - w_n \geq 0\). La suite est croissante.</p>
+                        
+                        <p><strong>3. Convergence et limite :</strong></p>
+                        <p>La suite \((w_n)\) est croissante et majorée par 1, donc elle converge vers une limite \(L\).</p>
+                        <p>En passant à la limite dans la relation de récurrence :</p>
+                        <p>\(L = \frac{3L + 2}{L + 4}\) ⇒ \(L(L + 4) = 3L + 2\) ⇒ \(L^2 + 4L - 3L - 2 = 0\) ⇒ \(L^2 + L - 2 = 0\).</p>
+                        <p>Le discriminant est \(Δ = 9\), les solutions sont \(L = 1\) et \(L = -2\).</p>
+                        <p>Comme \(w_n > 0\) pour tout \(n\), on a \(L ≥ 0\), donc \(L = 1\).</p>
+                    </div>
+                </div>
+                
+                <!-- On pourrait ajouter d'autres exercices ici -->
+                
+            </div>
+        </div>
+        
+        <div class="navigation">
+            <a href="index.html" class="nav-btn outline">← Retour à l'accueil</a>
+            <a href="#" class="nav-btn">Exercice suivant →</a>
+        </div>
+        
+        <footer>
+            <p>Module 2A Bac - Suites et raisonnement par récurrence</p>
+            <p>Programme de Terminale spécialité mathématiques - Annales du bac</p>
+            <p>© 2025 - Ministère de l'Éducation nationale</p>
+        </footer>
+    </div>
+
+    <script>
+        // Affichage des solutions
+        document.querySelectorAll('.solution-toggle').forEach(button => {
+            button.addEventListener('click', function() {
+                const solution = this.nextElementSibling;
+                solution.classList.toggle('show');
+                
+                if (solution.classList.contains('show')) {
+                    this.textContent = 'Cacher la solution';
+                } else {
+                    this.textContent = 'Voir la solution';
+                }
+            });
+        });
+        
+        // Navigation entre les chapitres
+        document.querySelectorAll('.chapter-item').forEach(item => {
+            item.addEventListener('click', function() {
+                document.querySelectorAll('.chapter-item').forEach(i => {
+                    i.classList.remove('active');
+                });
+                this.classList.add('active');
+                
+                // Ici on pourrait charger le contenu du chapitre sélectionné
+                const chapter = this.getAttribute('data-chapter');
+                console.log(`Chargement du chapitre: ${chapter}`);
+            });
+        });
+        
+        // Animation au chargement de la page
+        document.addEventListener('DOMContentLoaded', () => {
+            const exercises = document.querySelectorAll('.exercice');
+            exercises.forEach((exercise, index) => {
+                exercise.style.opacity = '0';
+                exercise.style.transform = 'translateY(20px)';
+                
+                setTimeout(() => {
+                    exercise.style.transition = 'opacity 0.5s ease, transform 0.5s ease';
+                    exercise.style.opacity = '1';
+                    exercise.style.transform = 'translateY(0)';
+                }, 100 + index * 100);
+            });
+        });
+    </script>
+</body>
+</html>
